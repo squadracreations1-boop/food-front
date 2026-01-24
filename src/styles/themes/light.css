@@ -1,0 +1,152 @@
+/* Light Theme */
+
+:root {
+  /* Application Colors */
+  --app-background: var(--color-gray-50);
+  --app-text: var(--color-gray-900);
+  --app-border: var(--color-gray-200);
+  --app-card-bg: white;
+  --app-header-bg: white;
+  --app-footer-bg: var(--color-primary-900);
+  
+  /* Component Colors */
+  --button-primary-bg: var(--color-primary-500);
+  --button-primary-hover: var(--color-primary-600);
+  --button-primary-text: white;
+  
+  --button-secondary-bg: var(--color-secondary-500);
+  --button-secondary-hover: var(--color-secondary-600);
+  --button-secondary-text: white;
+  
+  --button-outline-border: var(--color-primary-500);
+  --button-outline-text: var(--color-primary-600);
+  --button-outline-hover: var(--color-primary-50);
+  
+  /* Input Colors */
+  --input-bg: white;
+  --input-border: var(--color-gray-300);
+  --input-text: var(--color-gray-900);
+  --input-placeholder: var(--color-gray-400);
+  --input-focus-border: var(--color-primary-500);
+  --input-focus-ring: var(--color-primary-500);
+  
+  /* Card Colors */
+  --card-bg: white;
+  --card-border: var(--color-gray-200);
+  --card-shadow: var(--shadow-md);
+  --card-hover-shadow: var(--shadow-lg);
+  
+  /* Table Colors */
+  --table-bg: white;
+  --table-border: var(--color-gray-200);
+  --table-header-bg: var(--color-gray-50);
+  --table-row-hover: var(--color-gray-50);
+  
+  /* Navigation Colors */
+  --nav-bg: white;
+  --nav-border: var(--color-gray-200);
+  --nav-link: var(--color-gray-700);
+  --nav-link-hover: var(--color-primary-600);
+  --nav-link-active: var(--color-primary-600);
+  
+  /* Sidebar Colors */
+  --sidebar-bg: var(--color-gray-50);
+  --sidebar-border: var(--color-gray-200);
+  --sidebar-link: var(--color-gray-700);
+  --sidebar-link-hover: var(--color-primary-600);
+  --sidebar-link-active: var(--color-primary-600);
+  
+  /* Footer Colors */
+  --footer-bg: var(--color-primary-900);
+  --footer-text: var(--color-gray-100);
+  --footer-link: var(--color-primary-200);
+  --footer-link-hover: white;
+  
+  /* Alert Colors */
+  --alert-success-bg: var(--color-primary-50);
+  --alert-success-border: var(--color-primary-200);
+  --alert-success-text: var(--color-primary-800);
+  
+  --alert-warning-bg: var(--color-secondary-50);
+  --alert-warning-border: var(--color-secondary-200);
+  --alert-warning-text: var(--color-secondary-800);
+  
+  --alert-error-bg: #fee2e2;
+  --alert-error-border: #fecaca;
+  --alert-error-text: #991b1b;
+  
+  --alert-info-bg: #dbeafe;
+  --alert-info-border: #bfdbfe;
+  --alert-info-text: #1e40af;
+  
+  /* Badge Colors */
+  --badge-primary-bg: var(--color-primary-100);
+  --badge-primary-text: var(--color-primary-800);
+  
+  --badge-secondary-bg: var(--color-secondary-100);
+  --badge-secondary-text: var(--color-secondary-800);
+  
+  --badge-success-bg: var(--color-primary-100);
+  --badge-success-text: var(--color-primary-800);
+  
+  --badge-warning-bg: var(--color-secondary-100);
+  --badge-warning-text: var(--color-secondary-800);
+  
+  --badge-error-bg: #fee2e2;
+  --badge-error-text: #991b1b;
+  
+  /* Loading Skeleton */
+  --skeleton-bg: var(--color-gray-200);
+  --skeleton-highlight: white;
+  
+  /* Modal Colors */
+  --modal-overlay: rgba(0, 0, 0, 0.5);
+  --modal-bg: white;
+  --modal-border: var(--color-gray-200);
+  --modal-shadow: var(--shadow-2xl);
+  
+  /* Tooltip Colors */
+  --tooltip-bg: var(--color-gray-900);
+  --tooltip-text: white;
+  
+  /* Scrollbar Colors */
+  --scrollbar-track: var(--color-gray-100);
+  --scrollbar-thumb: var(--color-gray-400);
+  --scrollbar-thumb-hover: var(--color-gray-500);
+}
+
+/* Dark mode override for light theme */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="light"] {
+    /* Application Colors */
+    --app-background: var(--color-gray-50);
+    --app-text: var(--color-gray-900);
+    --app-border: var(--color-gray-200);
+    --app-card-bg: white;
+    --app-header-bg: white;
+    --app-footer-bg: var(--color-primary-900);
+    
+    /* Component Colors */
+    --button-primary-bg: var(--color-primary-500);
+    --button-primary-hover: var(--color-primary-600);
+    --button-primary-text: white;
+    
+    --input-bg: white;
+    --input-border: var(--color-gray-300);
+    --input-text: var(--color-gray-900);
+    
+    /* Card Colors */
+    --card-bg: white;
+    --card-border: var(--color-gray-200);
+    
+    /* Table Colors */
+    --table-bg: white;
+    --table-border: var(--color-gray-200);
+    --table-header-bg: var(--color-gray-50);
+    
+    /* Navigation Colors */
+    --nav-bg: white;
+    --nav-border: var(--color-gray-200);
+    --nav-link: var(--color-gray-700);
+  }
+}

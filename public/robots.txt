@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://maitreyifoods.com/sitemap.xml
+
+# Disallow admin and private routes
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /order/confirm
+Disallow: /order/success
+Disallow: /checkout

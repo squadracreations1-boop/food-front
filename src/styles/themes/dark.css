@@ -1,0 +1,165 @@
+/* Dark Theme */
+
+:root[data-theme="dark"] {
+  /* Application Colors */
+  --app-background: var(--color-gray-900);
+  --app-text: var(--color-gray-100);
+  --app-border: var(--color-gray-700);
+  --app-card-bg: var(--color-gray-800);
+  --app-header-bg: var(--color-gray-800);
+  --app-footer-bg: var(--color-gray-900);
+  
+  /* Component Colors */
+  --button-primary-bg: var(--color-primary-600);
+  --button-primary-hover: var(--color-primary-500);
+  --button-primary-text: white;
+  
+  --button-secondary-bg: var(--color-secondary-600);
+  --button-secondary-hover: var(--color-secondary-500);
+  --button-secondary-text: white;
+  
+  --button-outline-border: var(--color-primary-500);
+  --button-outline-text: var(--color-primary-400);
+  --button-outline-hover: var(--color-gray-700);
+  
+  /* Input Colors */
+  --input-bg: var(--color-gray-800);
+  --input-border: var(--color-gray-600);
+  --input-text: var(--color-gray-100);
+  --input-placeholder: var(--color-gray-500);
+  --input-focus-border: var(--color-primary-500);
+  --input-focus-ring: var(--color-primary-500);
+  
+  /* Card Colors */
+  --card-bg: var(--color-gray-800);
+  --card-border: var(--color-gray-700);
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  
+  /* Table Colors */
+  --table-bg: var(--color-gray-800);
+  --table-border: var(--color-gray-700);
+  --table-header-bg: var(--color-gray-900);
+  --table-row-hover: var(--color-gray-700);
+  
+  /* Navigation Colors */
+  --nav-bg: var(--color-gray-800);
+  --nav-border: var(--color-gray-700);
+  --nav-link: var(--color-gray-300);
+  --nav-link-hover: var(--color-primary-400);
+  --nav-link-active: var(--color-primary-400);
+  
+  /* Sidebar Colors */
+  --sidebar-bg: var(--color-gray-900);
+  --sidebar-border: var(--color-gray-700);
+  --sidebar-link: var(--color-gray-300);
+  --sidebar-link-hover: var(--color-primary-400);
+  --sidebar-link-active: var(--color-primary-400);
+  
+  /* Footer Colors */
+  --footer-bg: var(--color-gray-900);
+  --footer-text: var(--color-gray-300);
+  --footer-link: var(--color-primary-400);
+  --footer-link-hover: var(--color-primary-300);
+  
+  /* Alert Colors */
+  --alert-success-bg: rgba(16, 185, 129, 0.2);
+  --alert-success-border: rgba(16, 185, 129, 0.3);
+  --alert-success-text: var(--color-primary-300);
+  
+  --alert-warning-bg: rgba(245, 158, 11, 0.2);
+  --alert-warning-border: rgba(245, 158, 11, 0.3);
+  --alert-warning-text: var(--color-secondary-300);
+  
+  --alert-error-bg: rgba(239, 68, 68, 0.2);
+  --alert-error-border: rgba(239, 68, 68, 0.3);
+  --alert-error-text: #fca5a5;
+  
+  --alert-info-bg: rgba(59, 130, 246, 0.2);
+  --alert-info-border: rgba(59, 130, 246, 0.3);
+  --alert-info-text: #93c5fd;
+  
+  /* Badge Colors */
+  --badge-primary-bg: rgba(16, 185, 129, 0.2);
+  --badge-primary-text: var(--color-primary-300);
+  
+  --badge-secondary-bg: rgba(245, 158, 11, 0.2);
+  --badge-secondary-text: var(--color-secondary-300);
+  
+  --badge-success-bg: rgba(16, 185, 129, 0.2);
+  --badge-success-text: var(--color-primary-300);
+  
+  --badge-warning-bg: rgba(245, 158, 11, 0.2);
+  --badge-warning-text: var(--color-secondary-300);
+  
+  --badge-error-bg: rgba(239, 68, 68, 0.2);
+  --badge-error-text: #fca5a5;
+  
+  /* Loading Skeleton */
+  --skeleton-bg: var(--color-gray-700);
+  --skeleton-highlight: var(--color-gray-600);
+  
+  /* Modal Colors */
+  --modal-overlay: rgba(0, 0, 0, 0.7);
+  --modal-bg: var(--color-gray-800);
+  --modal-border: var(--color-gray-700);
+  --modal-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  
+  /* Tooltip Colors */
+  --tooltip-bg: var(--color-gray-700);
+  --tooltip-text: var(--color-gray-100);
+  
+  /* Scrollbar Colors */
+  --scrollbar-track: var(--color-gray-800);
+  --scrollbar-thumb: var(--color-gray-600);
+  --scrollbar-thumb-hover: var(--color-gray-500);
+}
+
+/* Light mode override for dark theme */
+@media (prefers-color-scheme: light) {
+  :root[data-theme="dark"] {
+    /* Application Colors */
+    --app-background: var(--color-gray-900);
+    --app-text: var(--color-gray-100);
+    --app-border: var(--color-gray-700);
+    --app-card-bg: var(--color-gray-800);
+    --app-header-bg: var(--color-gray-800);
+    --app-footer-bg: var(--color-gray-900);
+    
+    /* Component Colors */
+    --button-primary-bg: var(--color-primary-600);
+    --button-primary-hover: var(--color-primary-500);
+    --button-primary-text: white;
+    
+    --input-bg: var(--color-gray-800);
+    --input-border: var(--color-gray-600);
+    --input-text: var(--color-gray-100);
+    
+    /* Card Colors */
+    --card-bg: var(--color-gray-800);
+    --card-border: var(--color-gray-700);
+    
+    /* Table Colors */
+    --table-bg: var(--color-gray-800);
+    --table-border: var(--color-gray-700);
+    --table-header-bg: var(--color-gray-900);
+  }
+}
+
+/* Custom scrollbar for dark theme */
+:root[data-theme="dark"]::-webkit-scrollbar {
+  width: 10px;
+}
+
+:root[data-theme="dark"]::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+:root[data-theme="dark"]::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 5px;
+}
+
+:root[data-theme="dark"]::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
