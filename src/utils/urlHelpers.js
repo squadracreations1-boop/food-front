@@ -31,7 +31,19 @@ export const getImageUrl = (imagePath) => {
         imagePath = `/${imagePath}`;
     }
 
-    const BASE_URL = import.meta.env.VITE_API_URL;
+    // Base URL from environment
+    let BASE_URL = import.meta.env.VITE_API_URL || '';
 
-    return `${BASE_URL}${imagePath}`;
+    // If the base URL includes /api/v1 (or similar), we strip it for static assets
+    // because products are served from /uploads, not from /api/v1/uploads
+    if (BASE_URL.includes('/api/v1')) {
+        BASE_URL = BASE_URL.split('/api/v1')[0];
+    }
+
+    // Remove trailing slash from BASE_URL if present, and leading slash from imagePath
+    // to avoid double slashes like domain.com//uploads
+    const cleanBase = BASE_URL.replace(/\/+$/, '');
+    const cleanPath = imagePath.replace(/^\/+/, '');
+
+    return `${cleanBase}/${cleanPath}`;
 };
