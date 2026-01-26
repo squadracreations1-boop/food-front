@@ -6,10 +6,22 @@ const CartAnimation = () => {
     // This component listens for the 'addToCartAnimate' custom event
     useEffect(() => {
         const handleAnimation = (e) => {
-            const { startX, startY, imageUrl } = e.detail;
-            const cartIcon = document.getElementById('cart-icon-container') || document.getElementById('mobile-cart-icon-container');
+            // Fix: Check which icon is actually visible
+            const desktopIcon = document.getElementById('cart-icon-container');
+            const mobileIcon = document.getElementById('mobile-cart-icon-container');
 
-            if (!cartIcon || !imageUrl) return;
+            // Prioritize the icon that is currently visible (has dimensions)
+            let cartIcon = null;
+            if (desktopIcon && desktopIcon.getBoundingClientRect().width > 0) {
+                cartIcon = desktopIcon;
+            } else if (mobileIcon && mobileIcon.getBoundingClientRect().width > 0) {
+                cartIcon = mobileIcon;
+            } else {
+                cartIcon = desktopIcon || mobileIcon;
+            }
+
+            if (!cartIcon || !e.detail.imageUrl) return;
+            const { imageUrl, startX, startY } = e.detail;
 
             // Create flying image element
             const flyingImage = document.createElement('img');
@@ -47,11 +59,11 @@ const CartAnimation = () => {
             // Cleanup and bump effect
             setTimeout(() => {
                 flyingImage.remove();
-                
+
                 // Add bump animation to cart icon
                 cartIcon.style.transition = 'transform 0.2s';
                 cartIcon.style.transform = 'scale(1.2)';
-                
+
                 setTimeout(() => {
                     cartIcon.style.transform = 'scale(1)';
                 }, 200);

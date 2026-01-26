@@ -52,6 +52,9 @@ export const login = (formData) => async (dispatch) => {
     try {
         dispatch(loginRequest())
         const { data } = await api.post(`/api/v1/login`, { email, password });
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+        }
         dispatch(loginSuccess(data))
         return data
     } catch (error) {
@@ -80,6 +83,9 @@ export const register = (userData) => async (dispatch) => {
         }
 
         const { data } = await api.post(`/api/v1/register`, userData, config);
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+        }
         dispatch(registerSuccess(data))
         return data
     } catch (error) {
@@ -109,7 +115,8 @@ export const logout = () => async (dispatch) => {
     try {
         await api.get(`/api/v1/logout`);
         dispatch(logoutSuccess())
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('authToken'); // Cleanup if exists under old name
     } catch (error) {
         dispatch(logoutFail(error.response?.data?.message || error.message))
         throw error
@@ -183,6 +190,9 @@ export const resetPassword = (formData, token) => async (dispatch) => {
             }
         }
         const { data } = await api.post(`/api/v1/password/reset/${token}`, formData, config);
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+        }
         dispatch(resetPasswordSuccess(data))
         return data
     } catch (error) {

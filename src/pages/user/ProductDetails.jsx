@@ -12,7 +12,6 @@ import Loader from '../../components/feedback/Loader'
 import { EmptyProducts } from '../../components/feedback/EmptyState'
 import ProductCard from '../../components/ecommerce/ProductCard'
 import toast from 'react-hot-toast'
-import MetaData from '../../components/layout/MetaData'
 
 const ProductDetails = () => {
   const { id } = useParams()
@@ -131,10 +130,6 @@ const ProductDetails = () => {
 
   return (
     <div className="container py-8">
-      <MetaData
-        title={product.name}
-        description={product.description}
-      />
       {/* Breadcrumb */}
       <nav className="flex mb-6" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-3">

@@ -10,7 +10,6 @@ import Navbar from '../../components/layout/Navbar'
 import PageWrapper from '../../components/layout/PageWrapper'
 import HeroImages from '../../components/layout/HeroImages'
 import { useAuth } from '../../hooks/useAuth'
-import MetaData from '../../components/layout/MetaData'
 import { Leaf, LampDesk, AlertTriangle, BadgeCheck } from 'lucide-react';
 
 const Home = () => {
@@ -48,10 +47,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
-      <MetaData
-        title="Naturally Grown Masalas"
-        description="Premium organic masalas and traditional spices from Maitreyi Foods. 100% Certified organic and healthy."
-      />
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="container">

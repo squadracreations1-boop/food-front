@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles/PolicyPages.css';
 
-const PrivacyStatement = () => {
+const LegalPrivacy = () => {
     const currentDate = new Date().toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -166,4 +166,4 @@ const PrivacyStatement = () => {
     );
 };
 
-export default PrivacyStatement;
+export default LegalPrivacy;

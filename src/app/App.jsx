@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Toaster } from 'react-hot-toast'
 import AppRoutes from '../routes/AppRoutes'
 import { loadUser } from '../actions/userActions'
+import { loadUserFail } from '../slices/authSlice'
 import { getWishlist } from '../actions/wishlistActions'
 import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
@@ -19,10 +20,14 @@ function App() {
   // Load user on initial mount if token exists
   useEffect(() => {
     const token = localStorage.getItem('token')
-    if (token || !isAuthenticated) {
+
+    if (token && !isAuthenticated) {
       dispatch(loadUser())
+    } else if (!token && loading) {
+      // If no token, stop showing the full-screen loader
+      dispatch(loadUserFail())
     }
-  }, [dispatch, isAuthenticated])
+  }, [dispatch, isAuthenticated, loading])
 
   if (loading) {
     return <Loader fullScreen />

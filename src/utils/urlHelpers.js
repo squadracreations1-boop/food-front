@@ -31,9 +31,7 @@ export const getImageUrl = (imagePath) => {
         imagePath = `/${imagePath}`;
     }
 
-    const BASE_URL = "";
-    // Note: Since BASE_URL is empty, images will be loaded from the same origin
-    // which Netlify/Vite will proxy to the Render backend.
+    const BASE_URL = import.meta.env.VITE_API_URL;
 
     return `${BASE_URL}${imagePath}`;
 };

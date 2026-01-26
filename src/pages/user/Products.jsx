@@ -12,8 +12,6 @@ import Button from '../../components/common/Button'
 import PageWrapper from '../../components/layout/PageWrapper'
 import { useDebounce } from '../../hooks/useDebounce'
 
-import MetaData from '../../components/layout/MetaData'
-
 const Products = () => {
   const dispatch = useDispatch()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -81,10 +79,6 @@ const Products = () => {
 
   return (
     <PageWrapper title="Our Products" description="Browse our premium organic collection">
-      <MetaData
-        title="Shop Premium Organic Products"
-        description="Explore our wide range of organic spice blends, traditional masalas, and healthy food products at Maitreyi Foods."
-      />
       <div className="grid lg:grid-cols-4 gap-8">
         {/* Desktop Filters Sidebar */}
         <div className="hidden lg:block lg:col-span-1">

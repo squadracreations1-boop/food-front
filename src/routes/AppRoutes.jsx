@@ -17,9 +17,9 @@ import Register from '../pages/user/Auth/Register'
 import ForgotPassword from '../pages/user/Auth/ForgotPassword'
 import ResetPassword from '../pages/user/Auth/ResetPassword'
 import PaymentSuccess from '../pages/user/PaymentSuccess'
-import PrivacyStatement from '../components/policies/PrivacyStatement'
-import Returns from '../components/policies/Returns'
-import Terms from '../components/policies/Terms'
+import LegalPrivacy from '../components/policies/LegalPrivacy'
+import ReturnPolicy from '../components/policies/ReturnPolicy'
+import TermsAndConditions from '../components/policies/TermsOfService'
 // Admin pages
 import AdminDashboard from '../pages/admin/Dashboard'
 import AdminProducts from '../pages/admin/Products/AdminProducts'
@@ -46,9 +46,9 @@ function AppRoutes() {
       <Route path={routes.products} element={<Products />} />
       <Route path={routes.productDetails} element={<ProductDetails />} />
       <Route path={routes.paymentGateway} element={<Payment />} />
-      <Route path={routes.privacyPolicy} element={<PrivacyStatement />} />
-      <Route path={routes.returnPolicy} element={<Returns />} />
-      <Route path={routes.termsAndConditions} element={<Terms />} />
+      <Route path={routes.privacyPolicy} element={<LegalPrivacy />} />
+      <Route path={routes.returnPolicy} element={<ReturnPolicy />} />
+      <Route path={routes.termsAndConditions} element={<TermsAndConditions />} />
 
       <Route path={routes.login} element={
         isAuthenticated ? <Navigate to={routes.home} replace /> : <Login />

@@ -6,7 +6,7 @@ export const routes = {
   home: '/',
   products: '/products',
   productDetails: '/product/:id',
-  login: '/login',
+  login: '/login',   
   register: '/register',
   forgotPassword: '/password/forgot',
   resetPassword: '/password/reset/:token',

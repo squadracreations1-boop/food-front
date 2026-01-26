@@ -29,7 +29,7 @@ const ProductForm = ({ product = null, mode = 'create' }) => {
     images: [],
   })
 
-  const [images, setImages] = useState([])
+  const [images, setImages] = useState([]) // Stores both existing image paths and new File objects
   const [imagePreviews, setImagePreviews] = useState([])
 
   // Initialize form with product data if editing
@@ -52,6 +52,7 @@ const ProductForm = ({ product = null, mode = 'create' }) => {
       })
 
       if (product.images?.length > 0) {
+        setImages(product.images.map(img => img.image))
         setImagePreviews(product.images.map(img => getImageUrl(img.image)))
       }
     }
@@ -149,13 +150,24 @@ const ProductForm = ({ product = null, mode = 'create' }) => {
         }
       })
 
-      // Append only new images (not existing ones)
+      // Append images
+      let hasExisting = false;
       images.forEach(image => {
-        // Only append if it's a File object (new upload), not a string (existing image)
         if (image instanceof File) {
+          // New file upload
           productData.append('images', image)
+        } else if (typeof image === 'string') {
+          // Existing image path
+          productData.append('existingImages', image)
+          hasExisting = true;
         }
       })
+
+      // If we are editing and have no existing images left and no new ones, 
+      // explicitly tell backend to clear them
+      if (mode === 'edit' && !hasExisting && images.filter(img => img instanceof File).length === 0) {
+        productData.append('imagesCleared', 'true')
+      }
 
       if (mode === 'create') {
         await dispatch(createNewProduct(productData))

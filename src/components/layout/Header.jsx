@@ -35,10 +35,9 @@ function Header() {
     <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100 transition-all duration-300">
       <div className="container">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
           <Link to={routes.home} className="flex items-center space-x-3 group">
-            <div className="w-12 h-12 bg-emerald-900 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300 transform group-hover:scale-105">
-              <img src={Logo} alt="Maitreyi Foods" className="w-8 h-8 object-contain" />
+            <div className="w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300 transform group-hover:scale-105 border border-emerald-100">
+              <img src={Logo} alt="Maitreyi Foods" className="w-10 h-10 object-contain" />
             </div>
             <div className="flex flex-col">
               <h1 className="text-lg md:text-xl font-bold text-emerald-800 tracking-tight leading-tight group-hover:text-emerald-600 transition-colors">

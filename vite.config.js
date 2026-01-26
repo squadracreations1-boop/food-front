@@ -15,12 +15,12 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'https://food-back-1-8xns.onrender.com',
+        target: 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
       },
       '/uploads': {
-        target: 'https://food-back-1-8xns.onrender.com',
+        target: 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
       },
