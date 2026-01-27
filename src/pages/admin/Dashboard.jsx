@@ -16,7 +16,7 @@ import { useMemo } from 'react'
 const Dashboard = () => {
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.auth)
-  const { products = [], loading: productsLoading } = useSelector(state => state.products)
+  const { products = [], loading: productsLoading, productsCount } = useSelector(state => state.products)
   const { adminOrders: orders = [], loading: ordersLoading } = useSelector(state => state.order)
   const { users = [], loading: usersLoading } = useSelector(state => state.user)
 
@@ -37,9 +37,9 @@ const Dashboard = () => {
   const stats = useMemo(() => ({
     revenue,
     orders: orders.length,
-    products: products.length,
+    products: productsCount || 0,
     users: users.length,
-  }), [revenue, orders.length, products.length, users.length])
+  }), [revenue, orders.length, productsCount, users.length])
 
   const recentOrders = useMemo(() => {
     return orders.slice(0, 5)
@@ -151,7 +151,7 @@ const Dashboard = () => {
                             {new Date(order.createdAt).toLocaleDateString()}
                           </td>
                           <td className="px-4 py-3 text-sm font-medium text-gray-900">
-                            ${order.totalPrice?.toFixed(2)}
+                            ₹{order.totalPrice?.toFixed(2)}
                           </td>
                           <td className="px-4 py-3">
                             <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusColor}`}>
@@ -206,7 +206,7 @@ const Dashboard = () => {
                     </div>
                     <div className="text-right">
                       <div className="text-sm font-bold text-gray-900">
-                        ${product.price?.toFixed(2)}
+                        ₹{product.price?.toFixed(2)}
                       </div>
                       <div className="text-xs text-gray-500">
                         {product.numOfReviews || 0} reviews

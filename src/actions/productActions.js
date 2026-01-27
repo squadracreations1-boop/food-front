@@ -94,11 +94,15 @@ export const createReview = reviewData => async (dispatch) => {
 
 }
 
-export const getAdminProducts = () => async (dispatch) => {
+export const getAdminProducts = (page = 1, keyword = '', category = '') => async (dispatch) => {
 
     try {
         dispatch(adminProductsRequest())
-        const { data } = await api.get(`/api/v1/admin/products`);
+        let link = `/api/v1/admin/products?page=${page}`;
+        if (keyword) link += `&keyword=${keyword}`;
+        if (category && category !== 'all') link += `&category=${category}`;
+
+        const { data } = await api.get(link);
         dispatch(adminProductsSuccess(data))
     } catch (error) {
         dispatch(adminProductsFail(error.response?.data?.message || error.message))

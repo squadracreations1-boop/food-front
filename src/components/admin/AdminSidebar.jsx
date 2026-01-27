@@ -80,7 +80,7 @@ const AdminSidebar = () => {
               </div>
             )}
           </div>
-          
+
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
@@ -120,8 +120,8 @@ const AdminSidebar = () => {
                 end
                 className={({ isActive }) => `
                   flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
-                  ${isActive 
-                    ? 'bg-emerald-500 text-white' 
+                  ${isActive
+                    ? 'bg-emerald-500 text-white'
                     : 'hover:bg-gray-700 text-gray-300'
                   }
                   ${isCollapsed ? 'justify-center' : ''}
@@ -139,7 +139,7 @@ const AdminSidebar = () => {
                   </>
                 )}
               </NavLink>
-              
+
               {/* Sub-items */}
               {!isCollapsed && item.subItems && (
                 <div className="ml-4 mt-1 space-y-1">
@@ -149,8 +149,8 @@ const AdminSidebar = () => {
                       to={subItem.path}
                       className={({ isActive }) => `
                         block px-4 py-2 text-sm rounded transition-colors
-                        ${isActive 
-                          ? 'bg-emerald-500/20 text-emerald-300' 
+                        ${isActive
+                          ? 'bg-emerald-500/20 text-emerald-300'
                           : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
                         }
                       `}
@@ -177,7 +177,7 @@ const AdminSidebar = () => {
             🚪 Logout
           </Button>
         )}
-        
+
         {isCollapsed && (
           <button
             onClick={handleLogout}

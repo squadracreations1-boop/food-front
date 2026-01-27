@@ -1,7 +1,7 @@
 import React from 'react'
-import { TrendingUp ,BarChart3,Users ,PackageCheck ,Boxes  } from 'lucide-react';
+import { TrendingUp, BarChart3, Users, PackageCheck, Boxes } from 'lucide-react';
 
-const DashboardCard = ({
+const DashboardCard = React.memo(({
   title,
   value,
   icon,
@@ -36,7 +36,7 @@ const DashboardCard = ({
   }
 
   return (
-    <div 
+    <div
       onClick={onClick}
       className={`
         bg-white rounded-xl border border-gray-200 p-6
@@ -47,17 +47,17 @@ const DashboardCard = ({
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-          
+
           {loading ? (
             <div className="h-8 w-24 bg-gray-200 rounded animate-pulse mb-2" />
           ) : (
             <h3 className="text-2xl font-bold text-gray-900 mb-2">{value}</h3>
           )}
-          
+
           {subtitle && !loading && (
             <p className="text-sm text-gray-500">{subtitle}</p>
           )}
-          
+
           {trend && !loading && (
             <div className="flex items-center gap-1 mt-2">
               <span className={`text-sm font-medium ${trendColors[trend.type]}`}>
@@ -69,17 +69,17 @@ const DashboardCard = ({
             </div>
           )}
         </div>
-        
+
         <div className={`w-12 h-12 rounded-lg ${iconColors[color]} flex items-center justify-center`}>
           <span className="text-2xl">{icon}</span>
         </div>
       </div>
-      
+
       {/* Progress bar for some cards */}
       {trend && trend.type === 'up' && !loading && (
         <div className="mt-4">
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div 
+            <div
               className={`h-full ${colors[color]} rounded-full transition-all duration-500`}
               style={{ width: `${Math.min(trend.value, 100)}%` }}
             />
@@ -88,7 +88,7 @@ const DashboardCard = ({
       )}
     </div>
   )
-}
+})
 
 // Pre-configured dashboard cards
 export const RevenueCard = ({ value, trend, loading }) => (

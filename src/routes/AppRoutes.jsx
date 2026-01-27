@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { routes } from './routeConfig'
+import AdminRoutes from './AdminRoutes'
 
 // User pages
 import Home from '../pages/user/Home'
@@ -77,14 +78,16 @@ function AppRoutes() {
       {/* Admin routes */}
       <Route element={<RequireAuth />}>
         <Route element={<RequireAdmin />}>
-          <Route path={routes.admin.dashboard} element={<AdminDashboard />} />
-          <Route path={routes.admin.products} element={<AdminProducts />} />
-          <Route path={routes.admin.addProduct} element={<AddProduct />} />
-          <Route path={routes.admin.editProduct} element={<EditProduct />} />
-          <Route path={routes.admin.orders} element={<AdminOrders />} />
-          <Route path={routes.admin.orderDetails} element={<AdminOrderDetails />} />
-          <Route path={routes.admin.users} element={<AdminUsers />} />
-          <Route path={routes.admin.userDetails} element={<AdminUserDetails />} />
+          <Route element={<AdminRoutes />}>
+            <Route path={routes.admin.dashboard} element={<AdminDashboard />} />
+            <Route path={routes.admin.products} element={<AdminProducts />} />
+            <Route path={routes.admin.addProduct} element={<AddProduct />} />
+            <Route path={routes.admin.editProduct} element={<EditProduct />} />
+            <Route path={routes.admin.orders} element={<AdminOrders />} />
+            <Route path={routes.admin.orderDetails} element={<AdminOrderDetails />} />
+            <Route path={routes.admin.users} element={<AdminUsers />} />
+            <Route path={routes.admin.userDetails} element={<AdminUserDetails />} />
+          </Route>
         </Route>
       </Route>
 

@@ -12,6 +12,7 @@ import Loader from '../components/feedback/Loader'
 import CartAnimation from '../components/common/CartAnimation'
 
 import MobileBottomNav from '../components/layout/MobileBottomNav'
+import ScrollToTop from '../components/common/ScrollToTop'
 
 function App() {
   const dispatch = useDispatch()
@@ -78,11 +79,12 @@ function App() {
         }}
       />
 
+      <ScrollToTop />
       <Header />
       <CartAnimation />
 
       {/* Add padding bottom on mobile to prevent content being hidden by nav */}
-      <main className="flex-grow pb-16 md:pb-0">
+      <main className="flex-grow pb-24 md:pb-0">
         <AppRoutes />
       </main>
 

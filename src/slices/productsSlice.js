@@ -7,16 +7,22 @@ const productsSlice = createSlice({
         loading: false,
         products: [],
         productsCount: 0,
+        filteredProductsCount: 0,
         resPerPage: 6,
-        totalPages: 1
+        totalPages: 1,
+        stats: {
+            featuredCount: 0,
+            lowStockCount: 0,
+            outOfStockCount: 0
+        }
     },
     reducers: {
-        productsRequest(state, action){
+        productsRequest(state, action) {
             return {
                 loading: true
             }
         },
-        productsSuccess(state, action){
+        productsSuccess(state, action) {
             const count = action.payload.count || 0
             const resPerPage = action.payload.resPerPage || state.resPerPage || 1
             return {
@@ -27,33 +33,41 @@ const productsSlice = createSlice({
                 totalPages: Math.max(1, Math.ceil(count / resPerPage))
             }
         },
-        productsFail(state, action){
+        productsFail(state, action) {
             return {
                 loading: false,
-                error:  action.payload
+                error: action.payload
             }
         },
-        adminProductsRequest(state, action){
+        adminProductsRequest(state, action) {
             return {
                 loading: true
             }
         },
-        adminProductsSuccess(state, action){
+        adminProductsSuccess(state, action) {
+            const count = action.payload.totalProductsCount || 0
+            const filteredCount = action.payload.filteredProductsCount || count
+            const resPerPage = action.payload.resPerPage || 1
             return {
                 loading: false,
                 products: action.payload.products,
+                productsCount: count,
+                filteredProductsCount: filteredCount,
+                resPerPage: resPerPage,
+                totalPages: Math.max(1, Math.ceil(filteredCount / resPerPage)),
+                stats: action.payload.stats || state.stats
             }
         },
-        adminProductsFail(state, action){
+        adminProductsFail(state, action) {
             return {
                 loading: false,
-                error:  action.payload
+                error: action.payload
             }
         },
-        clearError(state, action){
+        clearError(state, action) {
             return {
                 ...state,
-                error:  null
+                error: null
             }
         }
     }
@@ -61,9 +75,9 @@ const productsSlice = createSlice({
 
 const { actions, reducer } = productsSlice;
 
-export const { 
-    productsRequest, 
-    productsSuccess, 
+export const {
+    productsRequest,
+    productsSuccess,
     productsFail,
     adminProductsFail,
     adminProductsRequest,

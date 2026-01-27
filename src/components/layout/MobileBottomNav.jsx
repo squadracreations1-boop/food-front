@@ -10,7 +10,12 @@ const MobileBottomNav = () => {
     const { isAuthenticated } = useSelector(state => state.auth)
 
     // Hide on checkout pages to avoid conflict with sticky checkout footer
-    if (location.pathname.includes('/checkout') || location.pathname.includes('/shipping')) {
+    // Also hide on admin routes
+    if (
+        location.pathname.includes('/checkout') ||
+        location.pathname.includes('/shipping') ||
+        location.pathname.startsWith('/admin')
+    ) {
         return null
     }
 

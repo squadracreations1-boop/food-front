@@ -1,5 +1,4 @@
-
-import React from 'react'
+import React, { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addCartItem } from '../../actions/cartActions'
@@ -9,7 +8,7 @@ import { ShoppingBag, Heart, Star, Eye, Truck, Leaf } from 'lucide-react'
 import { getImageUrl } from '../../utils/urlHelpers';
 
 
-const ProductCard = ({ product, showAddToCart = true, className = '', imageAspectRatio = 'aspect-[4/5]' }) => {
+const ProductCard = memo(({ product, showAddToCart = true, className = '', imageAspectRatio = 'aspect-[4/5]' }) => {
   const dispatch = useDispatch()
   const { items: wishlistItems } = useSelector(state => state.wishlist)
   const { isAuthenticated } = useSelector(state => state.auth)
@@ -219,6 +218,6 @@ const ProductCard = ({ product, showAddToCart = true, className = '', imageAspec
       </div>
     </div>
   )
-}
+})
 
 export default ProductCard

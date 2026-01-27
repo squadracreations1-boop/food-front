@@ -376,7 +376,7 @@ const OrderTable = ({ orders = [], loading = false, onStatusUpdate, onDeleteOrde
             Showing <span className="font-medium">{orders.length}</span> orders
           </div>
           <div className="text-sm font-medium text-gray-900">
-            Total Revenue: $
+            Total Revenue: ₹
             {
               orders
                 .filter(order =>

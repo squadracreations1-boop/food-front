@@ -19,47 +19,35 @@ const AdminProducts = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { products = [], loading } = useSelector(state => state.products || {})
+  const {
+    products = [],
+    loading,
+    productsCount,
+    filteredProductsCount,
+    resPerPage,
+    totalPages: serverTotalPages,
+    stats = {}
+  } = useSelector(state => state.products || {})
   const { isProductDeleted, isProductUpdated } = useSelector(state => state.product || {})
 
   const [searchTerm, setSearchTerm] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('all')
-  const debouncedSearch = useDebounce(searchTerm, 400)
-
-  // Filter products based on search and category
-  // Using useMemo instead of useEffect to avoid infinite loops and unnecessary re-renders
-  const filteredProducts = React.useMemo(() => {
-    let result = products || []
-
-    // Search filter
-    const term = debouncedSearch.trim().toLowerCase()
-    if (term) {
-      result = result.filter(product =>
-        (product.name || '').toLowerCase().includes(term) ||
-        (product.category || '').toLowerCase().includes(term) ||
-        (product.description || '').toLowerCase().includes(term)
-      )
-    }
-
-    // Category filter
-    if (categoryFilter !== 'all') {
-      result = result.filter(product =>
-        (product.category || '').toLowerCase() === categoryFilter.toLowerCase()
-      )
-    }
-
-    return result
-  }, [debouncedSearch, categoryFilter, products])
-
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 12
-  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / itemsPerPage))
+  const debouncedSearch = useDebounce(searchTerm, 500)
+
+  // Fetch products from server whenever dependencies change
+  useEffect(() => {
+    dispatch(getAdminProducts(currentPage, debouncedSearch, categoryFilter))
+  }, [dispatch, currentPage, debouncedSearch, categoryFilter])
 
   // Reset to first page when filtering changes
   useEffect(() => {
     setCurrentPage(1)
   }, [debouncedSearch, categoryFilter])
+
+  // Use server-side data directly
+  const filteredProducts = products;
+  const totalPages = serverTotalPages || 1;
 
   // Confirmation Modal State
   const [confirmModal, setConfirmModal] = useState({
@@ -88,7 +76,7 @@ const AdminProducts = () => {
   }
 
   const onToggleSelectAll = () => {
-    const pageIds = paginatedProducts.map(p => p._id)
+    const pageIds = filteredProducts.map(p => p._id)
     const allSelected = pageIds.every(id => selectedProducts.has(id))
     setSelectedProducts(prev => {
       const s = new Set(prev)
@@ -98,9 +86,7 @@ const AdminProducts = () => {
     })
   }
 
-  const paginatedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-
-
+  const paginatedProducts = filteredProducts;
 
   const confirmDelete = (productId) => {
     setConfirmModal({
@@ -113,6 +99,8 @@ const AdminProducts = () => {
         try {
           await dispatch(deleteProduct(productId))
           toast.success('Product deleted successfully')
+          // Refresh data after delete
+          dispatch(getAdminProducts(currentPage, debouncedSearch, categoryFilter))
         } catch (error) {
           toast.error('Failed to delete product')
         }
@@ -124,7 +112,7 @@ const AdminProducts = () => {
     navigate(`/admin/product/${productId}/edit`)
   }
 
-  if (loading) {
+  if (loading && products.length === 0) {
     return (
       <div className="p-6">
         <Loader message="Loading products..." />
@@ -141,9 +129,13 @@ const AdminProducts = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Manage Products</h1>
-            {/* <p className="text-gray-600">
-              {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''} found
-            </p> */}
+            <p className="text-gray-600 text-sm">
+              {filteredProductsCount !== productsCount ? (
+                <span>Showing {filteredProductsCount} matching products of {productsCount} total</span>
+              ) : (
+                <span>Manage and monitor your entire inventory</span>
+              )}
+            </p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -206,28 +198,28 @@ const AdminProducts = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-white border border-gray-200 rounded-xl p-4">
           <div className="text-2xl font-bold text-emerald-600">
-            {products.length}
+            {productsCount || 0}
           </div>
           <div className="text-sm text-gray-600">Total Products</div>
         </div>
 
         <div className="bg-white border border-gray-200 rounded-xl p-4">
           <div className="text-2xl font-bold text-blue-600">
-            {products.filter(p => p.isFeatured).length}
+            {stats.featuredCount || 0}
           </div>
           <div className="text-sm text-gray-600">Featured</div>
         </div>
 
         <div className="bg-white border border-gray-200 rounded-xl p-4">
           <div className="text-2xl font-bold text-amber-600">
-            {products.filter(p => p.stock < 10 && p.stock >= 1).length}
+            {stats.lowStockCount || 0}
           </div>
           <div className="text-sm text-gray-600">Low Stock </div>
         </div>
 
         <div className="bg-white border border-gray-200 rounded-xl p-4">
           <div className="text-2xl font-bold text-purple-600">
-            {products.filter(p => p.stock === 0).length}
+            {stats.outOfStockCount || 0}
           </div>
           <div className="text-sm text-gray-600">Out of Stock</div>
         </div>
