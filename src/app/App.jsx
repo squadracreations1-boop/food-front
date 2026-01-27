@@ -1,6 +1,7 @@
 
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import AppRoutes from '../routes/AppRoutes'
 import { loadUser } from '../actions/userActions'
@@ -17,6 +18,9 @@ import ScrollToTop from '../components/common/ScrollToTop'
 function App() {
   const dispatch = useDispatch()
   const { isAuthenticated, loading } = useSelector(state => state.auth)
+  const location = useLocation()
+
+  const isAdminRoute = location.pathname.startsWith('/admin')
 
   // Load user on initial mount if token exists
   useEffect(() => {
@@ -80,16 +84,16 @@ function App() {
       />
 
       <ScrollToTop />
-      <Header />
+      {!isAdminRoute && <Header />}
       <CartAnimation />
 
       {/* Add padding bottom on mobile to prevent content being hidden by nav */}
-      <main className="flex-grow pb-24 md:pb-0">
+      <main className={`flex-grow ${!isAdminRoute ? 'pb-24 md:pb-0' : ''}`}>
         <AppRoutes />
       </main>
 
-      <Footer />
-      <MobileBottomNav />
+      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <MobileBottomNav />}
     </div>
   )
 }
