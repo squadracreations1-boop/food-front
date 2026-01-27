@@ -12,6 +12,7 @@ import Loader from '../../components/feedback/Loader'
 import { EmptyProducts } from '../../components/feedback/EmptyState'
 import ProductCard from '../../components/ecommerce/ProductCard'
 import toast from 'react-hot-toast'
+import { ArrowLeft } from 'lucide-react'
 
 const ProductDetails = () => {
   const { id } = useParams()
@@ -130,6 +131,17 @@ const ProductDetails = () => {
 
   return (
     <div className="container py-8">
+      {/* Back Button - Hidden on Mobile */}
+      <div className="hidden md:flex mb-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 font-medium transition-colors"
+        >
+          <ArrowLeft size={20} />
+          <span>Back</span>
+        </button>
+      </div>
+
       {/* Breadcrumb */}
       <nav className="flex mb-6" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-3">

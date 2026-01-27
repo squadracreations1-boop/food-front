@@ -421,6 +421,7 @@ const Profile = () => {
               onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
               required
               placeholder="Enter your current password"
+              showPasswordToggle={true}
             />
 
             <Input
@@ -430,6 +431,7 @@ const Profile = () => {
               onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
               required
               placeholder="Create a new password"
+              showPasswordToggle={true}
               helperText="At least 8 characters with uppercase, lowercase, number, and special character"
             />
 
@@ -440,6 +442,7 @@ const Profile = () => {
               onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
               required
               placeholder="Confirm your new password"
+              showPasswordToggle={true}
             />
 
             <div className="flex gap-4">

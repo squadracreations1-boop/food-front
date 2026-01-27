@@ -9,15 +9,15 @@ import PageWrapper from '../../../components/layout/PageWrapper'
 import toast from 'react-hot-toast'
 import { FcGoogle, } from 'react-icons/fc';
 import { FaFacebookF } from 'react-icons/fa';
-import {LogIn} from 'lucide-react'
+import { LogIn } from 'lucide-react'
 
 const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  
+
   const { isAuthenticated, loading, error } = useSelector(state => state.auth)
-  
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -50,7 +50,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (!formData.email || !formData.password) {
       toast.error('Please fill in all fields')
       return
@@ -60,7 +60,7 @@ const Login = () => {
       await dispatch(login(formData))
       navigate(from, { replace: true })
       toast.success('Login successful')
-    } catch (error) { 
+    } catch (error) {
       toast.error(error)
     }
   }
@@ -68,8 +68,8 @@ const Login = () => {
 
 
   return (
-    <PageWrapper 
-   
+    <PageWrapper
+
       className="max-w-md mx-auto"
     >
       <div className="bg-gray-200 rounded-xl border shadow-xl border-gray-400 p-8">
@@ -77,16 +77,16 @@ const Login = () => {
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto mb-4 bg-emerald-100 rounded-full flex items-center justify-center">
             <span className="text-2xl">
-                 <LogIn size={25} strokeWidth={2} color='green' />
+              <LogIn size={25} strokeWidth={2} color='green' />
             </span>
           </div>
           <h2 className="text-2xl font-bold text-gray-900">Sign in to your account</h2>
-          
+
         </div>
 
-      
 
-       
+
+
 
         {/* Error Display */}
         {error && (
@@ -123,6 +123,7 @@ const Login = () => {
             onChange={handleChange}
             required
             placeholder="Enter your password"
+            showPasswordToggle={true}
             leftIcon={
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -179,7 +180,7 @@ const Login = () => {
               onClick={() => toast.info('Google login coming soon')}
             >
               <div className="flex items-center justify-center gap-2">
-                <span><FcGoogle size={20} strokeWidth={1.5} color='black'/></span>
+                <span><FcGoogle size={20} strokeWidth={1.5} color='black' /></span>
                 Google
               </div>
             </Button>
@@ -190,7 +191,7 @@ const Login = () => {
               onClick={() => toast.info('Facebook login coming soon')}
             >
               <div className="flex items-center justify-center gap-2">
-                <span><FaFacebookF size={20} strokeWidth={1.5} color='blue'/></span>
+                <span><FaFacebookF size={20} strokeWidth={1.5} color='blue' /></span>
                 Facebook
               </div>
             </Button>
