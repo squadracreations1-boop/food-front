@@ -59,12 +59,8 @@ const OrderDetails = () => {
 
   const handleStatusUpdate = async () => {
     if (!order) return
-
+    setActionLoading(true)
     try {
-      // dispatch(updateOrder(order._id, { 
-      //   status: newStatus,
-      //   ...trackingInfo 
-      // })) → provided externally
       await dispatch(updateOrder(order._id, {
         orderStatus: newStatus,
         ...trackingInfo,
@@ -73,7 +69,29 @@ const OrderDetails = () => {
       setShowStatusModal(false)
     } catch (error) {
       toast.error('Failed to update order status')
+    } finally {
+      setActionLoading(false)
     }
+  }
+
+  // Action Loading State
+  const [actionLoading, setActionLoading] = useState(false)
+
+  // Handlers for quick actions
+  const handleSendInvoice = () => {
+    toast.success('Invoice sent to customer (Placeholder)')
+  }
+
+  const handleContactCustomer = () => {
+    window.location.href = `mailto:${order.user?.email || ''}`
+  }
+
+  const handleCreateReturn = () => {
+    toast.error('Return validation module not connected')
+  }
+
+  const handleSaveNote = () => {
+    toast.success('Note saved (Placeholder)')
   }
 
   if (loading) {
@@ -294,7 +312,7 @@ const OrderDetails = () => {
                   placeholder="Add a note about this order..."
                 />
                 <div className="mt-2 flex justify-end">
-                  <Button size="sm">Save Note</Button>
+                  <Button size="sm" onClick={handleSaveNote}>Save Note</Button>
                 </div>
               </div>
 
@@ -466,13 +484,18 @@ const OrderDetails = () => {
               <Button
                 fullWidth
                 onClick={async () => {
+                  setActionLoading(true)
                   try {
                     await dispatch(updateOrder(order._id, { ...trackingInfo }))
                     toast.success('Tracking information updated')
                   } catch (err) {
                     toast.error('Failed to update tracking information')
+                  } finally {
+                    setActionLoading(false)
                   }
                 }}
+                loading={actionLoading}
+                disabled={actionLoading}
               >
                 Update Shipping Info
               </Button>
@@ -484,13 +507,13 @@ const OrderDetails = () => {
             <h3 className="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h3>
 
             <div className="space-y-3">
-              <Button variant="outline" fullWidth>
+              <Button variant="outline" fullWidth onClick={handleSendInvoice}>
                 Send Invoice Email
               </Button>
-              <Button variant="outline" fullWidth>
+              <Button variant="outline" fullWidth onClick={handleContactCustomer}>
                 Contact Customer
               </Button>
-              <Button variant="outline" fullWidth>
+              <Button variant="outline" fullWidth onClick={handleCreateReturn}>
                 Create Return
               </Button>
               <Button
@@ -566,6 +589,8 @@ const OrderDetails = () => {
             <Button
               fullWidth
               onClick={handleStatusUpdate}
+              loading={actionLoading}
+              disabled={actionLoading}
             >
               Update Status
             </Button>

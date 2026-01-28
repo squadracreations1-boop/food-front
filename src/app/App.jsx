@@ -23,16 +23,16 @@ function App() {
   const isAdminRoute = location.pathname.startsWith('/admin')
 
   // Load user on initial mount if token exists
+  // Load user on initial mount if token exists
   useEffect(() => {
     const token = localStorage.getItem('token')
 
-    if (token && !isAuthenticated) {
+    if (token) {
       dispatch(loadUser())
-    } else if (!token && loading) {
-      // If no token, stop showing the full-screen loader
+    } else {
       dispatch(loadUserFail())
     }
-  }, [dispatch, isAuthenticated, loading])
+  }, [dispatch])
 
   if (loading) {
     return <Loader fullScreen />

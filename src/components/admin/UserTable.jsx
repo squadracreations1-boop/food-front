@@ -20,6 +20,9 @@ const UserTable = ({ users = [], loading = false, onRoleUpdate, onDeleteUser, se
     onConfirm: () => { }
   })
 
+  const [updatingId, setUpdatingId] = React.useState(null);
+
+
   const handleRowKeyDown = (e, user) => {
     const row = e.currentTarget
     if (e.key === 'Enter') {
@@ -49,10 +52,13 @@ const UserTable = ({ users = [], loading = false, onRoleUpdate, onDeleteUser, se
   const handleRoleUpdate = async (userId, newRole) => {
     if (onRoleUpdate) return onRoleUpdate(userId, newRole)
     try {
+      setUpdatingId(userId)
       await dispatch(updateUser(userId, { role: newRole }))
       toast.success('User role updated')
     } catch (error) {
       toast.error('Failed to update user role')
+    } finally {
+      setUpdatingId(null)
     }
   }
 
@@ -189,7 +195,8 @@ const UserTable = ({ users = [], loading = false, onRoleUpdate, onDeleteUser, se
                     <select
                       value={user.role}
                       onChange={(e) => handleRoleUpdate(user._id, e.target.value)}
-                      className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                      disabled={updatingId === user._id || loading}
+                      className={`text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-emerald-500 ${updatingId === user._id ? 'opacity-50 cursor-wait' : ''}`}
                     >
                       <option value="user">User</option>
                       <option value="admin">Admin</option>

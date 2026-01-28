@@ -67,6 +67,8 @@ const AdminProducts = () => {
     isDangerous: false,
     onConfirm: () => { }
   })
+
+
   const [viewMode, setViewMode] = useState(window.innerWidth < 768 ? 'grid' : 'list')
 
   const confirmDelete = (productId) => {
@@ -116,8 +118,9 @@ const AdminProducts = () => {
             </p>
           </div>
 
+
           <Link to="/admin/product/new">
-            <Button className="shadow-lg shadow-emerald-500/20 group">
+            <Button className="shadow-lg shadow-emerald-500/20 group hover:shadow-emerald-500/40">
               <PlusSquare size={18} className="mr-2 group-hover:rotate-90 transition-transform" strokeWidth={2.5} />
               Add New Product
             </Button>

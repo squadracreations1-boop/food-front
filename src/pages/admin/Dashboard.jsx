@@ -7,7 +7,7 @@ import { getUsers } from '../../actions/userActions'
 import { RevenueCard, OrdersCard, UsersCard, ProductsCard, } from '../../components/admin/DashboardCard'
 import Loader from '../../components/feedback/Loader'
 import Button from '../../components/common/Button'
-import { ArrowRight, PlusSquare, Store, ClipboardList, Users } from 'lucide-react'
+import { ArrowRight, PlusSquare, Store, ClipboardList, Users, Search } from 'lucide-react'
 import { getImageUrl } from '../../utils/urlHelpers';
 
 import { useMemo } from 'react'
@@ -70,27 +70,25 @@ const Dashboard = () => {
               Welcome back, <span className="text-emerald-600 font-bold">{user?.name}</span>. Here's what's happening today.
             </p>
 
-            <form
-              className="mt-6 max-w-xl relative group"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const q = e.target.search.value;
-                if (q) navigate(`/admin/products?search=${encodeURIComponent(q)}`);
-              }}
-            >
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <span className="text-gray-400 group-focus-within:text-emerald-500 transition-colors">🔍</span>
-              </div>
-              <input
-                type="text"
-                name="search"
-                placeholder="Search inventory..."
-                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all text-sm font-medium"
-              />
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-bold text-gray-400 border border-gray-200 rounded-lg bg-white">Enter</kbd>
-              </div>
-            </form>
+            <div className="flex w-full md:w-auto gap-4 mt-6">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const q = e.target.elements.search.value;
+                  if (q) navigate(`/admin/products?search=${encodeURIComponent(q)}`);
+                }}
+                className="relative flex-1 md:w-80"
+              >
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <input
+                  type="text"
+                  name="search"
+                  placeholder="Search orders, products, or users..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+                />
+                <button type='submit' className='hidden'></button>
+              </form>
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">

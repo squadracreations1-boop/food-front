@@ -18,8 +18,13 @@ const OrderTable = ({ orders = [], loading = false, onStatusUpdate, onDeleteOrde
     confirmText: 'Confirm',
     cancelText: 'Cancel',
     isDangerous: false,
+    cancelText: 'Cancel',
+    isDangerous: false,
     onConfirm: () => { }
   });
+
+  const [updatingId, setUpdatingId] = React.useState(null); // Track which order is being updated
+
 
   const handleRowKeyDown = (e, order) => {
     const row = e.currentTarget
@@ -50,10 +55,13 @@ const OrderTable = ({ orders = [], loading = false, onStatusUpdate, onDeleteOrde
   const handleStatusUpdate = async (orderId, newStatus) => {
     if (onStatusUpdate) return onStatusUpdate(orderId, newStatus)
     try {
+      setUpdatingId(orderId)
       await dispatch(updateOrder(orderId, { orderStatus: newStatus }))
       toast.success('Order status updated')
     } catch (error) {
       toast.error('Failed to update order status')
+    } finally {
+      setUpdatingId(null)
     }
   }
 
@@ -268,7 +276,8 @@ const OrderTable = ({ orders = [], loading = false, onStatusUpdate, onDeleteOrde
                     <select
                       value={order.orderStatus}
                       onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
-                      className="text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer hover:border-emerald-400 transition"
+                      disabled={updatingId === order._id || loading}
+                      className={`text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer hover:border-emerald-400 transition ${updatingId === order._id ? 'opacity-50 cursor-wait' : ''}`}
                       title="Update order status"
                     >
                       {Object.values(orderStatus).map((status) => (

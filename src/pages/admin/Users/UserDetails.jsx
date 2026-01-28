@@ -19,6 +19,9 @@ const UserDetails = () => {
 
   const [editMode, setEditMode] = useState(false)
   const [updating, setUpdating] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false) // New state for delete
+  const [activeLoading, setActiveLoading] = useState(false) // New state for active toggle
+
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     title: '',
@@ -77,6 +80,28 @@ const UserDetails = () => {
     } finally {
       setUpdating(false)
     }
+  }
+
+  const handleToggleActive = (userId, currentStatus) => {
+    setConfirmModal({
+      isOpen: true,
+      title: currentStatus ? 'Deactivate User' : 'Activate User',
+      message: `Are you sure you want to ${currentStatus ? 'deactivate' : 'activate'} this user?`,
+      confirmText: currentStatus ? 'Deactivate' : 'Activate',
+      isDangerous: currentStatus,
+      onConfirm: async () => {
+        setActiveLoading(true)
+        try {
+          await dispatch(updateUser(userId, { active: !currentStatus }))
+          toast.success(`User ${!currentStatus ? 'activated' : 'deactivated'} successfully`)
+          dispatch(getUsers()) // Refresh user list to get updated details
+        } catch (error) {
+          toast.error('Failed to update user status')
+        } finally {
+          setActiveLoading(false)
+        }
+      }
+    })
   }
 
   const handleDelete = async () => {
@@ -302,17 +327,35 @@ const UserDetails = () => {
               <Button
                 fullWidth
                 variant="outline"
-                onClick={() => setConfirmModal({
-                  isOpen: true,
-                  title: 'Delete User',
-                  message: 'This action cannot be undone. The user will be permanently removed from the system.',
-                  confirmText: 'Delete User',
-                  isDangerous: true,
-                  onConfirm: handleDelete
-                })}
-                className="text-red-600 border-red-200 hover:bg-red-50"
+                onClick={() => handleToggleActive(user._id, user.active)}
+                disabled={activeLoading}
               >
-                🗑️ Delete User
+                {activeLoading ? 'Updating...' : (user.active ? '❌ Deactivate User' : '✅ Activate User')}
+              </Button>
+
+              <Button
+                fullWidth
+                variant="outline"
+                onClick={() =>
+                  setConfirmModal({
+                    isOpen: true,
+                    title: 'Delete User',
+                    message: 'This action cannot be undone. The user will be permanently removed from the system.',
+                    confirmText: 'Delete User',
+                    isDangerous: true,
+                    onConfirm: async () => {
+                      setDeleteLoading(true)
+                      try {
+                        await handleDelete()
+                      } finally {
+                        setDeleteLoading(false)
+                      }
+                    }
+                  })}
+                className="text-red-600 border-red-200 hover:bg-red-50"
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? 'Deleting...' : '🗑️ Delete User'}
               </Button>
             </div>
           </div>

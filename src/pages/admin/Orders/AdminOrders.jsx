@@ -487,6 +487,8 @@ const AdminOrders = () => {
                 <div className="flex gap-2 col-span-1 md:col-span-2 lg:col-span-1">
                   <Button
                     className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-xs px-2"
+                    loading={actionLoading}
+                    disabled={actionLoading}
                     onClick={async () => {
                       const ids = [...selectedOrders]
                       setActionLoading(true)
@@ -501,12 +503,13 @@ const AdminOrders = () => {
                         setActionLoading(false)
                       }
                     }}
-                    disabled={actionLoading}
                   >
                     <span>💳</span> Paid
                   </Button>
                   <Button
                     className="flex-1 bg-amber-600 hover:bg-amber-700 text-xs px-2"
+                    loading={actionLoading}
+                    disabled={actionLoading}
                     onClick={async () => {
                       const ids = [...selectedOrders]
                       setActionLoading(true)
@@ -521,7 +524,6 @@ const AdminOrders = () => {
                         setActionLoading(false)
                       }
                     }}
-                    disabled={actionLoading}
                   >
                     <span>⏳</span> Unpaid
                   </Button>
@@ -529,6 +531,8 @@ const AdminOrders = () => {
 
                 <Button
                   className="bg-blue-500 hover:bg-blue-600"
+                  loading={actionLoading}
+                  disabled={actionLoading}
                   onClick={async () => {
                     const ids = [...selectedOrders]
                     setActionLoading(true)
@@ -543,13 +547,16 @@ const AdminOrders = () => {
                       setActionLoading(false)
                     }
                   }}
-                  disabled={actionLoading}
-                ><div className='flex gap-2'>
+                >
+                  <div className='flex gap-2'>
                     <LoaderIcon size={20} strokeWidth={1.5} /> Mark Processing
-                  </div></Button>
+                  </div>
+                </Button>
 
                 <Button
                   className="bg-purple-500 hover:bg-purple-600"
+                  loading={actionLoading}
+                  disabled={actionLoading}
                   onClick={async () => {
                     const ids = [...selectedOrders]
                     setActionLoading(true)
@@ -564,7 +571,6 @@ const AdminOrders = () => {
                       setActionLoading(false)
                     }
                   }}
-                  disabled={actionLoading}
                 >
                   <div className='flex gap-2'>
                     <Truck size={20} strokeWidth={1.5} /> Mark Shipped
@@ -573,6 +579,8 @@ const AdminOrders = () => {
 
                 <Button
                   className="bg-emerald-500 hover:bg-emerald-600"
+                  loading={actionLoading}
+                  disabled={actionLoading}
                   onClick={async () => {
                     const ids = [...selectedOrders]
                     setActionLoading(true)
@@ -587,7 +595,6 @@ const AdminOrders = () => {
                       setActionLoading(false)
                     }
                   }}
-                  disabled={actionLoading}
                 >
                   <div className="flex gap-2">
                     <CheckCircle2 size={20} strokeWidth={1.5} /> Mark Delivered
@@ -596,6 +603,7 @@ const AdminOrders = () => {
 
                 <Button
                   className="bg-red-500 hover:bg-red-600"
+                  loading={actionLoading}
                   onClick={async () => {
                     const ids = [...selectedOrders]
                     setActionLoading(true)
@@ -610,7 +618,6 @@ const AdminOrders = () => {
                       setActionLoading(false)
                     }
                   }}
-                  disabled={actionLoading}
                 >
                   <div className="flex gap-2">
                     <XCircle size={20} strokeWidth={1.5} /> Cancel Orders

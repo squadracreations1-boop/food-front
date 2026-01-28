@@ -34,6 +34,8 @@ const AdminUsers = () => {
     phone: '',
   })
   const [creatingUser, setCreatingUser] = useState(false)
+  const [bulkActionLoading, setBulkActionLoading] = useState(false) // New state for bulk action loading
+
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1)
@@ -203,10 +205,26 @@ const AdminUsers = () => {
               size="sm"
               onClick={() => {
                 // Export users functionality
-                toast.info('Export feature coming soon')
+                const headers = ['User ID,Name,Email,Role,Status,Phone,Joined At\n'];
+                const csvContent = users.map(u =>
+                  `${u._id},"${u.name || ''}",${u.email},${u.role},${u.active ? 'Active' : 'Inactive'},"${u.phone || ''}",${new Date(u.createdAt).toISOString()}`
+                ).join('\n');
+
+                const blob = new Blob([headers + csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                if (link.download !== undefined) {
+                  const url = URL.createObjectURL(blob);
+                  link.setAttribute('href', url);
+                  link.setAttribute('download', `users_export_${new Date().toISOString().split('T')[0]}.csv`);
+                  link.style.visibility = 'hidden';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  toast.success('Users exported successfully');
+                }
               }}
             >
-              Export Users
+              Export CSV
             </Button>
             <Button
               size="sm"
@@ -512,9 +530,14 @@ const AdminUsers = () => {
                     onConfirm: performAction
                   })
                 } else {
-                  performAction()
+                  setBulkActionLoading(true)
+                  await performAction()
+                  setBulkActionLoading(false)
                 }
-              }}>
+              }}
+                loading={bulkActionLoading}
+                disabled={bulkActionLoading}
+              >
                 Apply to Selected
               </Button>
             </div>

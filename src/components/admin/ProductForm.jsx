@@ -31,6 +31,24 @@ const ProductForm = ({ product = null, mode = 'create' }) => {
 
   const [images, setImages] = useState([]) // Stores both existing image paths and new File objects
   const [imagePreviews, setImagePreviews] = useState([])
+  const [urlInput, setUrlInput] = useState('')
+
+  const handleAddUrl = () => {
+    const trimmedUrl = urlInput.trim()
+    if (!trimmedUrl) return
+
+    // Basic URL validation
+    try {
+      new URL(trimmedUrl)
+    } catch (_) {
+      toast.error('Please enter a valid URL')
+      return
+    }
+
+    setImages(prev => [...prev, trimmedUrl])
+    setImagePreviews(prev => [...prev, trimmedUrl])
+    setUrlInput('')
+  }
 
   // Initialize form with product data if editing
   useEffect(() => {
@@ -157,9 +175,18 @@ const ProductForm = ({ product = null, mode = 'create' }) => {
           // New file upload
           productData.append('images', image)
         } else if (typeof image === 'string') {
-          // Existing image path
-          productData.append('existingImages', image)
-          hasExisting = true;
+          const trimmedImage = image.trim();
+          // Check if it's an existing server image or a new URL
+          if (trimmedImage.startsWith('/uploads') || trimmedImage.startsWith('http')) {
+            if (trimmedImage.startsWith('http')) {
+              // It's a new external URL (or existing external one)
+              productData.append('imageUrls', trimmedImage)
+            } else {
+              // It's a server-hosted existing image
+              productData.append('existingImages', trimmedImage)
+              hasExisting = true;
+            }
+          }
         }
       })
 
@@ -337,6 +364,19 @@ const ProductForm = ({ product = null, mode = 'create' }) => {
             Product Images
           </label>
 
+          {/* URL Input */}
+          <div className="flex gap-2 mb-4">
+            <Input
+              value={urlInput}
+              onChange={(e) => setUrlInput(e.target.value)}
+              placeholder="Enter image URL..."
+              className="flex-1"
+            />
+            <Button type="button" onClick={handleAddUrl} variant="outline">
+              Add URL
+            </Button>
+          </div>
+
           {/* Image Previews */}
           {imagePreviews.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
@@ -379,11 +419,14 @@ const ProductForm = ({ product = null, mode = 'create' }) => {
               <Button
                 type="button"
                 variant="outline"
-                className="mt-4"
+                className="mt-4 pointer-events-none"
               >
                 Choose Files
               </Button>
             </label>
+            <p className="text-xs text-center text-gray-400 mt-2">
+              (Files are processed securely)
+            </p>
           </div>
         </div>
 
