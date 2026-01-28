@@ -95,6 +95,22 @@ export const register = (userData) => async (dispatch) => {
 
 }
 
+export const adminCreateUser = (userData) => async (dispatch) => {
+    try {
+        // We reuse registerRequest/Success for simplicity or create new ones if needed
+        // For now, let's just make the API call directly as it doesn't need to change current user state
+        const config = {
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }
+        const { data } = await api.post(`/api/v1/register`, userData, config);
+        return data
+    } catch (error) {
+        throw error.response?.data?.message || error.message
+    }
+}
+
 export const loadUser = () => async (dispatch) => {
 
     try {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { getAdminProducts } from '../../actions/productActions'
 import { adminOrders } from '../../actions/orderActions'
 import { getUsers } from '../../actions/userActions'
@@ -15,6 +15,7 @@ import { useMemo } from 'react'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { user } = useSelector(state => state.auth)
   const { products = [], loading: productsLoading, productsCount } = useSelector(state => state.products)
   const { adminOrders: orders = [], loading: ordersLoading } = useSelector(state => state.order)
@@ -69,19 +70,27 @@ const Dashboard = () => {
               Welcome back, <span className="text-emerald-600 font-bold">{user?.name}</span>. Here's what's happening today.
             </p>
 
-            <div className="mt-6 max-w-xl relative group">
+            <form
+              className="mt-6 max-w-xl relative group"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const q = e.target.search.value;
+                if (q) navigate(`/admin/products?search=${encodeURIComponent(q)}`);
+              }}
+            >
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <span className="text-gray-400 group-focus-within:text-emerald-500 transition-colors">🔍</span>
               </div>
               <input
                 type="text"
-                placeholder="Quick search orders, products, or users..."
+                name="search"
+                placeholder="Search inventory..."
                 className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all text-sm font-medium"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-bold text-gray-400 border border-gray-200 rounded-lg bg-white">Ctrl + K</kbd>
+                <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-bold text-gray-400 border border-gray-200 rounded-lg bg-white">Enter</kbd>
               </div>
-            </div>
+            </form>
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">

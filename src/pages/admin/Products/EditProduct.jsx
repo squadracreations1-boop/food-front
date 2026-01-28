@@ -106,9 +106,14 @@ const EditProduct = () => {
                       message: 'Are you sure you want to delete this product? This action cannot be undone.',
                       confirmText: 'Delete Product',
                       isDangerous: true,
-                      onConfirm: () => {
-                        // This would call deleteProduct action
-                        toast.error('Delete functionality would be implemented here')
+                      onConfirm: async () => {
+                        try {
+                          await dispatch(deleteProduct(product._id))
+                          toast.success('Product deleted successfully')
+                          navigate('/admin/products')
+                        } catch (error) {
+                          toast.error('Failed to delete product')
+                        }
                       }
                     })
                   }}

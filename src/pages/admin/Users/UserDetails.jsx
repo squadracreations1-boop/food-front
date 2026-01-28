@@ -338,8 +338,6 @@ const UserDetails = () => {
         </div>
       </div>
 
-      {/* Delete Confirmation Modal */}
-      {/* Delete Confirmation Modal */}
       <ConfirmationModal
         isOpen={confirmModal.isOpen}
         onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}

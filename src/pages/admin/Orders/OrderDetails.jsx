@@ -465,9 +465,13 @@ const OrderDetails = () => {
 
               <Button
                 fullWidth
-                onClick={() => {
-                  // Save tracking info
-                  toast.success('Tracking information updated')
+                onClick={async () => {
+                  try {
+                    await dispatch(updateOrder(order._id, { ...trackingInfo }))
+                    toast.success('Tracking information updated')
+                  } catch (err) {
+                    toast.error('Failed to update tracking information')
+                  }
                 }}
               >
                 Update Shipping Info

@@ -19,6 +19,7 @@ const productsSlice = createSlice({
     reducers: {
         productsRequest(state, action) {
             return {
+                ...state,
                 loading: true
             }
         },
@@ -41,6 +42,8 @@ const productsSlice = createSlice({
         },
         adminProductsRequest(state, action) {
             return {
+                ...state,
+                products: [], // Clear products to prevent stale data flash
                 loading: true
             }
         },

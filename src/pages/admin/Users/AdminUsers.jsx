@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getUsers, deleteUser, updateUser } from '../../../actions/userActions'
+import { getUsers, deleteUser, updateUser, adminCreateUser } from '../../../actions/userActions'
 import Pagination from '../../../components/common/Pagination'
 import { useDebounce } from '../../../hooks/useDebounce'
 import toast from 'react-hot-toast'
@@ -123,27 +123,7 @@ const AdminUsers = () => {
 
     try {
       setCreatingUser(true)
-      // Call API to create user - adjust based on your backend route
-      const response = await fetch('/api/user/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          name: newUser.name,
-          email: newUser.email,
-          password: newUser.password,
-          phone: newUser.phone,
-          role: newUser.role
-        })
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.message || 'Failed to create user')
-      }
-
+      await dispatch(adminCreateUser(newUser))
       toast.success('User created successfully!')
       setShowAddUserModal(false)
       setNewUser({ name: '', email: '', password: '', role: 'user', phone: '' })
@@ -151,7 +131,7 @@ const AdminUsers = () => {
       // Refresh users list
       dispatch(getUsers())
     } catch (error) {
-      toast.error(error.message || 'Failed to create user')
+      toast.error(error)
       console.error('User creation error:', error)
     } finally {
       setCreatingUser(false)
@@ -232,7 +212,7 @@ const AdminUsers = () => {
               size="sm"
               onClick={() => setShowAddUserModal(true)}
             >
-              <span className="mr-2"><PlusIcon size={20} strokeWidth={1.5} color='white' /></span>
+              <span className="mr-2"><PlusIcon size={20} strokeWidth={1.5} className="text-white" /></span>
               Add User
             </Button>
           </div>
@@ -250,7 +230,7 @@ const AdminUsers = () => {
               <div className="text-sm text-gray-600">Total Users</div>
             </div>
             <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <span className="text-2xl"><UserCircle2 size={20} strokeWidth={1.5} color='green' /></span>
+              <span className="text-2xl"><UserCircle2 size={20} strokeWidth={1.5} className="text-emerald-600" /></span>
             </div>
           </div>
         </div>
@@ -264,7 +244,7 @@ const AdminUsers = () => {
               <div className="text-sm text-gray-600">Admin Users</div>
             </div>
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <span className="text-2xl"><UserCircle2 size={20} strokeWidth={1.5} color='purple' /></span>
+              <span className="text-2xl"><UserCircle2 size={20} strokeWidth={1.5} className="text-purple-600" /></span>
             </div>
           </div>
         </div>
@@ -278,7 +258,7 @@ const AdminUsers = () => {
               <div className="text-sm text-gray-600">Active Users</div>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <span className="text-2xl"><CheckCircle2 size={20} strokeWidth={1.5} color='blue' /></span>
+              <span className="text-2xl"><CheckCircle2 size={20} strokeWidth={1.5} className="text-blue-600" /></span>
             </div>
           </div>
         </div>
@@ -292,7 +272,7 @@ const AdminUsers = () => {
               <div className="text-sm text-gray-600">New This Month</div>
             </div>
             <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-              <span className="text-2xl"><TrendingUp size={20} strokeWidth={1.5} color='orange' /></span>
+              <span className="text-2xl"><TrendingUp size={20} strokeWidth={1.5} className="text-amber-600" /></span>
             </div>
           </div>
         </div>

@@ -163,9 +163,9 @@ const ProductForm = ({ product = null, mode = 'create' }) => {
         }
       })
 
-      // If we are editing and have no existing images left and no new ones, 
-      // explicitly tell backend to clear them
-      if (mode === 'edit' && !hasExisting && images.filter(img => img instanceof File).length === 0) {
+      // If we are editing and have no existing images left, 
+      // explicitly tell backend to clear the old list before adding new ones
+      if (mode === 'edit' && !hasExisting) {
         productData.append('imagesCleared', 'true')
       }
 

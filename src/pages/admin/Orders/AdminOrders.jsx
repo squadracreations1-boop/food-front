@@ -203,7 +203,7 @@ const AdminOrders = () => {
               <div className="text-sm text-gray-600">Total Revenue</div>
             </div>
             <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <span className="text-2xl"><TrendingUp size={20} strokeWidth={1.5} color='green' /></span>
+              <span className="text-2xl"><TrendingUp size={20} strokeWidth={1.5} className="text-emerald-600" /></span>
             </div>
           </div>
         </div>
@@ -217,7 +217,7 @@ const AdminOrders = () => {
               <div className="text-sm text-gray-600">Total Orders</div>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <span className="text-2xl"><PackageCheck size={20} strokeWidth={1.5} color='blue' /></span>
+              <span className="text-2xl"><PackageCheck size={20} strokeWidth={1.5} className="text-blue-600" /></span>
             </div>
           </div>
         </div>
@@ -231,7 +231,7 @@ const AdminOrders = () => {
               <div className="text-sm text-gray-600">Pending Orders</div>
             </div>
             <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-              <span className="text-2xl"><Clock size={20} strokeWidth={1.5} color='orange' /></span>
+              <span className="text-2xl"><Clock size={20} strokeWidth={1.5} className="text-amber-600" /></span>
             </div>
           </div>
         </div>
@@ -245,7 +245,7 @@ const AdminOrders = () => {
               <div className="text-sm text-gray-600">Avg. Order Value</div>
             </div>
             <div className="w-12 h-12 bg-purple-200 rounded-lg flex items-center justify-center">
-              <span className="text-2xl"><BarChart3 size={20} strokeWidth={1.5} color='purple' /></span>
+              <span className="text-2xl"><BarChart3 size={20} strokeWidth={1.5} className="text-purple-600" /></span>
             </div>
           </div>
         </div>
@@ -494,7 +494,7 @@ const AdminOrders = () => {
                         await Promise.all(ids.map(id => dispatch(updateOrder(id, { paymentInfo: { status: 'PAID' } }))))
                         toast.success(`${ids.length} order(s) marked as PAID`)
                         setSelectedOrders(new Set())
-                        dispatch(adminOrders())
+                        dispatch(adminOrders(currentPage, itemsPerPage))
                       } catch (err) {
                         toast.error('Failed to update orders')
                       } finally {
@@ -514,7 +514,7 @@ const AdminOrders = () => {
                         await Promise.all(ids.map(id => dispatch(updateOrder(id, { paymentInfo: { status: 'PENDING' } }))))
                         toast.success(`${ids.length} order(s) marked as UNPAID`)
                         setSelectedOrders(new Set())
-                        dispatch(adminOrders())
+                        dispatch(adminOrders(currentPage, itemsPerPage))
                       } catch (err) {
                         toast.error('Failed to update orders')
                       } finally {

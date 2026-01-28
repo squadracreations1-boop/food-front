@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { getAdminProducts, deleteProduct, updateProduct } from '../../../actions/productActions'
 import { clearProductDeleted, clearProductUpdated } from '../../../slices/productSlice'
 import { EmptyProducts } from '../../../components/feedback/EmptyState'
@@ -18,6 +18,11 @@ import { getImageUrl } from '../../../utils/urlHelpers';
 const AdminProducts = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  // Initialize searchTerm from URL if present
+  const queryParams = new URLSearchParams(location.search)
+  const querySearch = queryParams.get('search') || ''
 
   const {
     products = [],
@@ -28,14 +33,20 @@ const AdminProducts = () => {
     stats = {}
   } = useSelector(state => state.products || {})
 
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState(querySearch)
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
   const debouncedSearch = useDebounce(searchTerm, 500)
 
-  // Fetch products from server whenever dependencies change
+  // Clear update/delete flags and fetch products
   useEffect(() => {
     dispatch(getAdminProducts(currentPage, debouncedSearch, categoryFilter))
+
+    // Clear flags so they don't trigger multiple times or persist
+    return () => {
+      dispatch(clearProductUpdated())
+      dispatch(clearProductDeleted())
+    }
   }, [dispatch, currentPage, debouncedSearch, categoryFilter])
 
   // Reset to first page when filtering changes
@@ -81,10 +92,10 @@ const AdminProducts = () => {
     navigate(`/admin/product/${productId}/edit`)
   }
 
-  if (loading && products.length === 0) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader message="Loading products..." />
+        <Loader message="Loading inventory..." />
       </div>
     )
   }
