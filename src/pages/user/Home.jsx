@@ -38,7 +38,19 @@ const Home = () => {
         setLoadingFeatured(false)
       }
     }
+const featured = data.products.filter(p => p.isFeatured)
 
+const mustShowId = "PRODUCT_ID"
+
+const forced = featured.find(p => p._id === mustShowId)
+
+let final = featured.slice(0, 9)
+
+if (forced && !final.some(p => p._id === mustShowId)) {
+  final.push(forced)
+}
+
+setFeaturedProducts(final)
     fetchFeatured()
   }, [])
 
