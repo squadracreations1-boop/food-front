@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { getProducts } from '../../actions/productActions'
 import api from '../../utils/api'
 import ProductCard from '../../components/ecommerce/ProductCard'
+import Loader from '../../components/feedback/Loader'
 import { EmptyProducts } from '../../components/feedback/EmptyState'
 import Navbar from '../../components/layout/Navbar'
 import PageWrapper from '../../components/layout/PageWrapper'
@@ -14,10 +16,10 @@ const Home = () => {
   const dispatch = useDispatch()
   const { products = [], loading } = useSelector(state => state.products || {})
   const { isAuthenticated } = useAuth()
-
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [loadingFeatured, setLoadingFeatured] = useState(true)
 
+  // Load featured products directly to bypass pagination
   useEffect(() => {
     let isMounted = true
 
@@ -25,7 +27,6 @@ const Home = () => {
       try {
         const { data } = await api.get('/api/v1/products?resPerPage=100')
 
-<<<<<<< HEAD
         if (isMounted && data?.products?.length) {
           // Backend now sorts by updatedAt desc by default
           // We just take the first 10 products
@@ -34,25 +35,6 @@ const Home = () => {
             .slice(0, 10)
 
           setFeaturedProducts(latestProducts)
-=======
-        if (data?.products?.length) {
-          // Filter featured & in-stock products
-          let featured = data.products.filter(
-            p => p.isFeatured === true && p.stock > 0
-          )
-
-          // OPTIONAL: force one product to appear
-          const mustShowId = 'PRODUCT_ID' // replace or remove
-          const forced = featured.find(p => p._id === mustShowId)
-
-          let finalList = featured.slice(0, 9)
-
-          if (forced && !finalList.some(p => p._id === mustShowId)) {
-            finalList.push(forced)
-          }
-
-          setFeaturedProducts(finalList)
->>>>>>> 87def882703683ba194eb979a939a6004b5105ef
         }
       } catch (error) {
         console.error('Failed to fetch featured products:', error)
@@ -75,64 +57,87 @@ const Home = () => {
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="container">
-          <div className="grid lg:grid-cols-2 gap-12 items-start py-12 lg:py-20">
-            <div className="space-y-5">
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-sm font-medium">
-                <Leaf className="w-5 h-5 mr-2" /> 100% Organic Certified
-              </span>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start py-12 lg:py-20">
+            <div className="space-y-4 lg:space-y-5">
+              <div>
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-sm font-medium mb-3">
+                  <Leaf className="w-5 h-5 mr-2" /> 100% Organic Certified
+                </span>
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-2 lg:mb-3">
+                  Naturally Grown.<br />
+                  <span className="text-emerald-600">Traditionally Made</span> Masalas
+                </h1>
+                <p className="text-base lg:text-lg text-gray-600 mb-5">
+                  Authentic South Indian spice blends made from farm-fresh ingredients,
+                  stone-ground in small batches to preserve aroma, flavor, and purity.
+                </p>
+              </div>
 
-              <h1 className="text-4xl lg:text-6xl font-bold text-gray-900">
-                Naturally Grown.<br />
-                <span className="text-emerald-600">Traditionally Made</span> Masalas
-              </h1>
-
-              <p className="text-lg text-gray-600">
-                Authentic South Indian spice blends made from farm-fresh ingredients,
-                stone-ground in small batches to preserve aroma and purity.
-              </p>
-
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Link
                   to="/products"
-                  className="px-6 py-3 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700"
+                  className="inline-flex items-center justify-center px-6 py-3.5 text-base font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 transition-colors"
                 >
                   Start Shopping
                 </Link>
-
                 {!isAuthenticated && (
                   <Link
                     to="/register"
-                    className="px-6 py-3 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                    className="inline-flex items-center justify-center px-6 py-3.5 text-base font-medium rounded-lg text-emerald-700 bg-emerald-100 hover:bg-emerald-200 transition-colors"
                   >
                     Join Now
                   </Link>
                 )}
               </div>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-100/50 mt-2">
+                <div>
+                  <div className="text-xl lg:text-2xl font-bold text-emerald-600">10K+</div>
+                  <div className="text-xs lg:text-sm text-gray-600">Happy Customers</div>
+                </div>
+                <div>
+                  <div className="text-xl lg:text-2xl font-bold text-emerald-600">50+</div>
+                  <div className="text-xs lg:text-sm text-gray-600">Organic Products</div>
+                </div>
+                <div>
+                  <div className="text-xl lg:text-2xl font-bold text-emerald-600">24/7</div>
+                  <div className="text-xs lg:text-sm text-gray-600">Delivery Support</div>
+                </div>
+              </div>
             </div>
 
-            <HeroImages heroProducts={heroProducts} />
+            {/* Hero Images */}
+            <div className="lg:mt-0 mt-8">
+              <HeroImages heroProducts={heroProducts} />
+            </div>
           </div>
         </div>
       </section>
 
+      {/* Categories Navigation */}
       <Navbar />
 
       {/* Featured Products */}
       <section className="py-16">
-<<<<<<< HEAD
         <PageWrapper title="Our Products" description="Explore our complete collection of traditionally crafted organic spice blends.">
           {loadingFeatured ? (
-=======
-        <PageWrapper
-          title="Featured Masalas"
-          description="Handpicked premium organic spice blends"
-        >
-          {loadingFeatured ? (
-            <div className="text-center py-10">Loading featured products…</div>
-          ) : featuredProducts.length ? (
->>>>>>> 87def882703683ba194eb979a939a6004b5105ef
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {featuredProducts.map(product => (
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 animate-pulse">
+                  <div className="h-40 bg-gray-200 rounded mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-2 w-3/4"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-4 w-1/2"></div>
+                  <div className="flex justify-between">
+                    <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                    <div className="h-8 bg-gray-200 rounded w-20"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {featuredProducts.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>
@@ -144,16 +149,18 @@ const Home = () => {
             <div className="text-center mt-12">
               <Link
                 to="/products"
-                className="px-6 py-3 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                className="inline-flex items-center px-6 py-3 text-base font-medium rounded-lg text-emerald-700 bg-emerald-100 hover:bg-emerald-200 transition-colors"
               >
-                View All Products →
+                View All Products
+                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
               </Link>
             </div>
           )}
         </PageWrapper>
       </section>
 
-<<<<<<< HEAD
       {/* Benefits Section */}
       <section className="mb-8">
         <div className="container">
@@ -215,28 +222,10 @@ const Home = () => {
               </p>
             </div>
           </div>
-=======
-      {/* Benefits */}
-      <section className="mb-12">
-        <div className="container grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-          <Benefit icon={Leaf} title="100% Certified Organic" />
-          <Benefit icon={LampDesk} title="Traditional Preparation" />
-          <Benefit icon={AlertTriangle} title="No Preservatives" />
-          <Benefit icon={BadgeCheck} title="Premium Quality" />
->>>>>>> 87def882703683ba194eb979a939a6004b5105ef
         </div>
       </section>
     </div>
   )
 }
-
-const Benefit = ({ icon: Icon, title }) => (
-  <div>
-    <div className="w-16 h-16 mx-auto mb-4 bg-emerald-100 rounded-full flex items-center justify-center">
-      <Icon className="w-6 h-6" />
-    </div>
-    <h3 className="font-semibold text-gray-900">{title}</h3>
-  </div>
-)
 
 export default Home
