@@ -10,7 +10,7 @@ import Navbar from '../../components/layout/Navbar'
 import PageWrapper from '../../components/layout/PageWrapper'
 import HeroImages from '../../components/layout/HeroImages'
 import { useAuth } from '../../hooks/useAuth'
-import { Leaf, LampDesk, AlertTriangle, BadgeCheck } from 'lucide-react';
+import { Leaf, LampDesk, AlertTriangle, BadgeCheck } from 'lucide-react'
 
 const Home = () => {
   const dispatch = useDispatch()
@@ -21,29 +21,36 @@ const Home = () => {
 
   // Load featured products directly to bypass pagination
   useEffect(() => {
+    let isMounted = true
+
     const fetchFeatured = async () => {
       try {
-        // Fetch a large number of products to find featured ones
-        // In a real app, you'd have a specific endpoint /products/featured
-        const { data } = await api.get('/api/v1/products?resPerPage=100');
-        if (data.products) {
-          const featured = data.products
-            .filter(product => product.isFeatured && product.stock >= 0)
+        const { data } = await api.get('/api/v1/products?resPerPage=100')
+
+        if (isMounted && data?.products?.length) {
+          // Backend now sorts by updatedAt desc by default
+          // We just take the first 10 products
+          const latestProducts = data.products
+            .filter(p => p.stock > 0)
             .slice(0, 10)
-          setFeaturedProducts(featured)
+
+          setFeaturedProducts(latestProducts)
         }
       } catch (error) {
-        console.error("Failed to fetch featured products", error)
+        console.error('Failed to fetch featured products:', error)
       } finally {
-        setLoadingFeatured(false)
+        if (isMounted) setLoadingFeatured(false)
       }
     }
 
     fetchFeatured()
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   const heroProducts = featuredProducts.slice(0, 4)
-
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
@@ -113,8 +120,8 @@ const Home = () => {
 
       {/* Featured Products */}
       <section className="py-16">
-        <PageWrapper title="Featured Masalas" description="Our handpicked selection of premium, traditionally crafted organic spice blends.">
-          {loading ? (
+        <PageWrapper title="Our Products" description="Explore our complete collection of traditionally crafted organic spice blends.">
+          {loadingFeatured ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {[...Array(5)].map((_, i) => (
                 <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 animate-pulse">
@@ -153,8 +160,6 @@ const Home = () => {
           )}
         </PageWrapper>
       </section>
-
-
 
       {/* Benefits Section */}
       <section className="mb-8">
@@ -219,8 +224,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-
     </div>
   )
 }
