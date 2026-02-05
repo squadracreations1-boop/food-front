@@ -1,57 +1,46 @@
-name: Keep Render Alive
+name: Single 13-Minute Ping Session
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+    - cron: '0 */1 * * *'  # Every 2 hours
+  workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
-    timeout-minutes: 15  # 2 minutes buffer
     
     steps:
-    - name: Continuous ping for 13 minutes
+    - name: 🔄 Single 13-Minute Session
       run: |
-        URL="https://maitreyi-foods.onrender.com"
-        DURATION=780
-        INTERVAL=15
+        echo "▶️  Starting 13-minute session at: $(date)"
+        echo "This is a SINGLE session that lasts 13 minutes"
         
-        echo "Starting 13-minute ping session to $URL"
-        echo "Session will end at $(date -d "+13 minutes")"
+        # Start time
+        START=$(date +%s)
         
-        # Calculate number of pings needed
-        COUNT=$((DURATION / INTERVAL))
+        # Make initial request
+        echo "🌐 Making initial request..."
+        curl -s "https://maitreyi-foods.onrender.com" > /dev/null 2>&1 && echo "✅ Initial connection successful"
         
-        for ((i=1; i<=COUNT; i++))
-        do
-          echo ""
-          echo "Ping attempt #$i/$COUNT"
-          echo "Time: $(date +%H:%M:%S)"
-          
-          # Try curl with multiple retry options
-          curl -s \
-               --max-time 20 \
-               --retry 3 \
-               --retry-max-time 60 \
-               --connect-timeout 10 \
-               "$URL" && \
-          echo "✅ Success" || \
-          echo "⚠️  Request failed (continuing...)"
-          
-          # Show progress bar
-          PERCENTAGE=$((i * 100 / COUNT))
-          BAR=$(printf '█%.0s' $(seq 1 $((PERCENTAGE / 2))))
-          SPACE=$(printf ' %.0s' $(seq 1 $((50 - PERCENTAGE / 2))))
-          echo "[${BAR}${SPACE}] ${PERCENTAGE}%"
-          
-          # Sleep except on last iteration
-          if [ $i -lt $COUNT ]; then
-            sleep $INTERVAL
+        # Keep-alive loop - just wait for 13 minutes
+        # This creates one session that lasts 13 minutes
+        for i in {1..78}; do  # 78 * 10 seconds = 780 seconds (13 minutes)
+          # Show progress every minute
+          if [ $((i % 6)) -eq 0 ]; then
+            elapsed=$((i * 10 / 60))
+            echo "⏱️  Session active for ${elapsed} minutes..."
           fi
+          
+          # Wait 10 seconds
+          sleep 10
         done
         
         echo ""
-        echo "✅ Ping session completed successfully!"
-        echo "Total pings: $COUNT"
-        echo "Final time: $(date)"
+        echo "✅ SESSION COMPLETE"
+        echo "Started: $(date -d @$START)"
+        echo "Ended: $(date)"
+        echo "Duration: 13 minutes (single session)"
+        
+        # Final request to confirm
+        echo "🌐 Making final request..."
+        curl -s "https://maitreyi-foods.onrender.com" > /dev/null 2>&1 && echo "✅ Final connection successful"
