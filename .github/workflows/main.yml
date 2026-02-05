@@ -1,0 +1,57 @@
+name: Keep Render Alive
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15  # 2 minutes buffer
+    
+    steps:
+    - name: Continuous ping for 13 minutes
+      run: |
+        URL="https://maitreyi-foods.onrender.com"
+        DURATION=780
+        INTERVAL=15
+        
+        echo "Starting 13-minute ping session to $URL"
+        echo "Session will end at $(date -d "+13 minutes")"
+        
+        # Calculate number of pings needed
+        COUNT=$((DURATION / INTERVAL))
+        
+        for ((i=1; i<=COUNT; i++))
+        do
+          echo ""
+          echo "Ping attempt #$i/$COUNT"
+          echo "Time: $(date +%H:%M:%S)"
+          
+          # Try curl with multiple retry options
+          curl -s \
+               --max-time 20 \
+               --retry 3 \
+               --retry-max-time 60 \
+               --connect-timeout 10 \
+               "$URL" && \
+          echo "✅ Success" || \
+          echo "⚠️  Request failed (continuing...)"
+          
+          # Show progress bar
+          PERCENTAGE=$((i * 100 / COUNT))
+          BAR=$(printf '█%.0s' $(seq 1 $((PERCENTAGE / 2))))
+          SPACE=$(printf ' %.0s' $(seq 1 $((50 - PERCENTAGE / 2))))
+          echo "[${BAR}${SPACE}] ${PERCENTAGE}%"
+          
+          # Sleep except on last iteration
+          if [ $i -lt $COUNT ]; then
+            sleep $INTERVAL
+          fi
+        done
+        
+        echo ""
+        echo "✅ Ping session completed successfully!"
+        echo "Total pings: $COUNT"
+        echo "Final time: $(date)"
