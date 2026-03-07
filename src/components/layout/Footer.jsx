@@ -91,13 +91,13 @@ function Footer() {
               {/* Phone */}
               <li className="flex items-center space-x-3">
                 <span className="text-xl"> <Phone className="w-5 h-5 text-sky-400 mt-1" /></span>
-                <span>+91 97502 52635</span>
+                <a href="tel:+919750252635" className="hover:text-white hover:underline transition-colors">+91 97502 52635</a>
               </li>
 
               {/* Email */}
               <li className="flex items-center space-x-3">
                 <span className="text-xl"> <Mail className="w-5 h-5 text-red-500 mt-1" /></span>
-                <span>maitreyifoods@gmail.com</span>
+                <a href="mailto:maitreyifoods@gmail.com" className="hover:text-white hover:underline transition-colors break-all">maitreyifoods@gmail.com</a>
               </li>
             </ul>
           </div>

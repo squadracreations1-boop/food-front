@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { getProducts } from '../../actions/productActions'
 import api from '../../utils/api'
 import ProductCard from '../../components/ecommerce/ProductCard'
 import Loader from '../../components/feedback/Loader'
 import { EmptyProducts } from '../../components/feedback/EmptyState'
 import Navbar from '../../components/layout/Navbar'
-import PageWrapper from '../../components/layout/PageWrapper'
 import HeroImages from '../../components/layout/HeroImages'
 import { useAuth } from '../../hooks/useAuth'
 import { Leaf, LampDesk, AlertTriangle, BadgeCheck } from 'lucide-react'
@@ -19,22 +19,37 @@ const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [loadingFeatured, setLoadingFeatured] = useState(true)
 
-  // Load featured products directly to bypass pagination
+  // Load ALL featured products by paginating through all pages
   useEffect(() => {
     let isMounted = true
 
-    const fetchFeatured = async () => {
+    const fetchAllFeatured = async () => {
       try {
-        const { data } = await api.get('/api/v1/products?resPerPage=100')
+        let allProducts = []
+        let page = 1
+        let totalPages = 1
 
-        if (isMounted && data?.products?.length) {
-          // Backend now sorts by updatedAt desc by default
-          // We just take the first 10 products
-          const latestProducts = data.products
-            .filter(p => p.stock > 0)
-            .slice(0, 10)
+        // Fetch all pages to collect every product
+        do {
+          const { data } = await api.get(`/api/v1/products?page=${page}&sort=_id`)
+          if (data?.products?.length) {
+            allProducts = [...allProducts, ...data.products]
+          }
+          // API returns count & resPerPage, not totalPages
+          const count = data?.count || 0
+          const perPage = data?.resPerPage || 8
+          totalPages = Math.max(1, Math.ceil(count / perPage))
+          page++
+        } while (page <= totalPages)
 
-          setFeaturedProducts(latestProducts)
+        if (isMounted && allProducts.length) {
+          // Deduplicate products by _id (same product can appear across pages)
+          const uniqueProducts = allProducts.filter(
+            (product, index, self) => index === self.findIndex(p => p._id === product._id)
+          )
+          // Filter only isFeatured products with stock
+          const featured = uniqueProducts.filter(p => p.isFeatured && p.stock > 0)
+          setFeaturedProducts(featured)
         }
       } catch (error) {
         console.error('Failed to fetch featured products:', error)
@@ -43,17 +58,24 @@ const Home = () => {
       }
     }
 
-    fetchFeatured()
+    fetchAllFeatured()
 
     return () => {
       isMounted = false
     }
   }, [])
 
+  // Hero shows the 4 most recently updated featured products
   const heroProducts = featuredProducts.slice(0, 4)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
+      <Helmet>
+        <title>Maitreyi Foods – Buy Organic Spice Blends & Traditional Masalas Online</title>
+        <meta name="description" content="Shop 100% organic, stone-ground South Indian spice blends at Maitreyi Foods. Farm-fresh masalas, preservative-free ingredients, and traditional recipes delivered to your doorstep." />
+        <link rel="canonical" href="https://www.maitreyifoods.com/" />
+      </Helmet>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="container">
@@ -120,7 +142,14 @@ const Home = () => {
 
       {/* Featured Products */}
       <section className="py-16">
-        <PageWrapper title="Our Products" description="Explore our complete collection of traditionally crafted organic spice blends.">
+        <div className="container">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Our Products</h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Explore our handpicked collection of traditionally crafted organic spice blends, selected for their exceptional quality and authentic flavor.
+            </p>
+          </div>
+
           {loadingFeatured ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {[...Array(5)].map((_, i) => (
@@ -158,7 +187,7 @@ const Home = () => {
               </Link>
             </div>
           )}
-        </PageWrapper>
+        </div>
       </section>
 
       {/* Benefits Section */}

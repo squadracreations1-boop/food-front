@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import './styles/PolicyPages.css';
 
 const TermsOfService = () => {
@@ -10,6 +11,11 @@ const TermsOfService = () => {
 
     return (
         <div className="policy-container">
+            <Helmet>
+                <title>Terms of Service – Maitreyi Foods</title>
+                <meta name="description" content="Read the Terms of Service for Maitreyi Foods. Understand our website usage terms, order and payment policies, user account responsibilities, and legal obligations." />
+                <link rel="canonical" href="https://www.maitreyifoods.com/terms-and-conditions" />
+            </Helmet>
             <div className="policy-header">
                 <h1>Maitreyi Foods</h1>
                 <p className="policy-subtitle">Taste the Tradition</p>
@@ -23,8 +29,8 @@ const TermsOfService = () => {
             <div className="policy-content">
                 <section className="policy-section">
                     <p>
-                        Welcome to <strong>Maitreyi Foods</strong>. By accessing or using our website 
-                        (www.maitreyifoods.com), you agree to be bound by the following Terms of Service. 
+                        Welcome to <strong>Maitreyi Foods</strong>. By accessing or using our website
+                        (www.maitreyifoods.com), you agree to be bound by the following Terms of Service.
                         Please read them carefully before using our services.
                     </p>
                 </section>
@@ -32,20 +38,20 @@ const TermsOfService = () => {
                 <section className="policy-section">
                     <h2>1. Website Usage</h2>
                     <p>
-                        You must be at least 18 years of age, or access the website under parental 
+                        You must be at least 18 years of age, or access the website under parental
                         or legal guardian supervision.
                     </p>
                     <p>
-                        All content available on this website—including text, images, graphics, logos, 
-                        and branding—is the exclusive property of Maitreyi Foods and is protected under 
+                        All content available on this website—including text, images, graphics, logos,
+                        and branding—is the exclusive property of Maitreyi Foods and is protected under
                         applicable copyright and intellectual property laws.
                     </p>
                     <p>
-                        Any unauthorized reproduction, modification, distribution, or commercial use of 
+                        Any unauthorized reproduction, modification, distribution, or commercial use of
                         our content is strictly prohibited.
                     </p>
                     <p>
-                        You agree to provide accurate, current, and complete information when creating 
+                        You agree to provide accurate, current, and complete information when creating
                         an account or placing an order.
                     </p>
                 </section>
@@ -53,11 +59,11 @@ const TermsOfService = () => {
                 <section className="policy-section">
                     <h2>2. Orders & Payments</h2>
                     <p>
-                        All orders placed on the website are subject to product availability, pricing 
+                        All orders placed on the website are subject to product availability, pricing
                         accuracy, and order confirmation.
                     </p>
                     <p>
-                        We reserve the right to cancel or refuse any order due to pricing errors, 
+                        We reserve the right to cancel or refuse any order due to pricing errors,
                         suspected fraud, or operational constraints.
                     </p>
                     <p>
@@ -69,14 +75,14 @@ const TermsOfService = () => {
                 <section className="policy-section">
                     <h2>3. User Accounts</h2>
                     <p>
-                        You are solely responsible for maintaining the confidentiality of your 
+                        You are solely responsible for maintaining the confidentiality of your
                         login credentials.
                     </p>
                     <p>
                         Any activity performed using your account will be deemed as authorized by you.
                     </p>
                     <p>
-                        Please notify us immediately if you suspect any unauthorized access or 
+                        Please notify us immediately if you suspect any unauthorized access or
                         security breach.
                     </p>
                 </section>
@@ -84,7 +90,7 @@ const TermsOfService = () => {
                 <section className="policy-section">
                     <h2>4. Limitation of Liability</h2>
                     <p>
-                        Maitreyi Foods shall not be liable for any indirect, incidental, special, 
+                        Maitreyi Foods shall not be liable for any indirect, incidental, special,
                         or consequential damages arising from the use or inability to use this website.
                     </p>
                     <p>
@@ -98,7 +104,7 @@ const TermsOfService = () => {
                         We may revise these Terms of Service at any time without prior notice.
                     </p>
                     <p>
-                        Continued use of the website after updates constitutes acceptance of the 
+                        Continued use of the website after updates constitutes acceptance of the
                         revised terms.
                     </p>
                 </section>
@@ -120,7 +126,7 @@ const TermsOfService = () => {
 
                 <div className="note-box">
                     <p>
-                        <strong>Note:</strong> These Terms of Service constitute the entire agreement 
+                        <strong>Note:</strong> These Terms of Service constitute the entire agreement
                         between you and Maitreyi Foods regarding your use of our website and services.
                     </p>
                 </div>

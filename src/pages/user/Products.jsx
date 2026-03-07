@@ -78,7 +78,12 @@ const Products = () => {
   }
 
   return (
-    <PageWrapper title="Our Products" description="Browse our premium organic collection">
+    <PageWrapper
+      title="Our Products"
+      description="Browse our premium organic collection"
+      metaDescription="Browse our full collection of organic spice blends, traditional masalas, and farm-fresh ingredients. Filter by category, price, and ratings. Free delivery on Maitreyi Foods."
+      canonicalPath="/products"
+    >
       <div className="grid lg:grid-cols-4 gap-8">
         {/* Desktop Filters Sidebar */}
         <div className="hidden lg:block lg:col-span-1">

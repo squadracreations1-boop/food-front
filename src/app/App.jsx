@@ -14,6 +14,7 @@ import CartAnimation from '../components/common/CartAnimation'
 
 import MobileBottomNav from '../components/layout/MobileBottomNav'
 import ScrollToTop from '../components/common/ScrollToTop'
+import WhatsAppButton from '../components/common/WhatsAppButton'
 
 function App() {
   const dispatch = useDispatch()
@@ -94,6 +95,7 @@ function App() {
 
       {!isAdminRoute && <Footer />}
       {!isAdminRoute && <MobileBottomNav />}
+      {!isAdminRoute && <WhatsAppButton />}
     </div>
   )
 }

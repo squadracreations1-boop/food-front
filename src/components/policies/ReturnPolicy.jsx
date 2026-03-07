@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import './styles/PolicyPages.css';
 
 const ReturnPolicy = () => {
@@ -10,6 +11,11 @@ const ReturnPolicy = () => {
 
     return (
         <div className="policy-container">
+            <Helmet>
+                <title>Return & Refund Policy – Maitreyi Foods</title>
+                <meta name="description" content="Maitreyi Foods return and refund policy. Learn about our 7-day return window, refund process, non-returnable items, and how to report damaged or incorrect products." />
+                <link rel="canonical" href="https://www.maitreyifoods.com/return-policy" />
+            </Helmet>
             <div className="policy-header">
                 <h1>Maitreyi Foods</h1>
                 <p className="policy-subtitle">Taste the Tradition</p>
@@ -23,7 +29,7 @@ const ReturnPolicy = () => {
             <div className="policy-content">
                 <section className="policy-section">
                     <p>
-                        At <strong>Maitreyi Foods</strong>, customer satisfaction is our priority. 
+                        At <strong>Maitreyi Foods</strong>, customer satisfaction is our priority.
                         If you are not completely satisfied with your purchase, we are here to assist you.
                     </p>
                 </section>
@@ -38,14 +44,14 @@ const ReturnPolicy = () => {
                         <li>Incorrect products received</li>
                         <li>Spoiled or expired items (perishable goods)</li>
                     </ul>
-                    
+
                     <h3>Return Conditions:</h3>
                     <ul className="policy-list">
                         <li>Items must be unused and in original packaging</li>
                         <li>Original invoice must accompany the return</li>
                         <li>Products must be in resalable condition</li>
                     </ul>
-                    
+
                     <h3>Return Process:</h3>
                     <ol className="policy-list">
                         <li>Contact us at <strong>support@maitreyifoods.com</strong> within 7 days of delivery</li>
@@ -58,15 +64,15 @@ const ReturnPolicy = () => {
                 <section className="policy-section">
                     <h2>2. Refunds</h2>
                     <p>
-                        Once the returned product is received and inspected, we will notify you of 
+                        Once the returned product is received and inspected, we will notify you of
                         approval or rejection via email.
                     </p>
                     <p>
-                        <strong>Approved refunds</strong> will be processed to the original payment method 
+                        <strong>Approved refunds</strong> will be processed to the original payment method
                         within <strong>5–10 business days</strong>.
                     </p>
                     <p>
-                        <strong>Shipping charges are non-refundable</strong>, except in cases where 
+                        <strong>Shipping charges are non-refundable</strong>, except in cases where
                         the error is on our part (wrong item shipped, damaged during transit).
                     </p>
                     <p>
@@ -132,8 +138,8 @@ const ReturnPolicy = () => {
 
                 <div className="note-box">
                     <p>
-                        <strong>Important:</strong> This policy applies only to products purchased directly 
-                        from Maitreyi Foods website. Products purchased from third-party retailers are 
+                        <strong>Important:</strong> This policy applies only to products purchased directly
+                        from Maitreyi Foods website. Products purchased from third-party retailers are
                         subject to their respective return policies.
                     </p>
                 </div>

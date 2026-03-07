@@ -1,6 +1,23 @@
-function PageWrapper({ children, title, description, className = '' }) {
+import { Helmet } from 'react-helmet-async'
+
+function PageWrapper({ children, title, description, metaDescription, canonicalPath, className = '' }) {
+  const siteUrl = 'https://www.maitreyifoods.com'
+  const pageMetaDescription = metaDescription || description || ''
+  const canonicalUrl = canonicalPath ? `${siteUrl}${canonicalPath}` : ''
+  const pageTitle = title ? `${title} – Maitreyi Foods` : 'Maitreyi Foods'
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>{pageTitle}</title>
+        {pageMetaDescription && (
+          <meta name="description" content={pageMetaDescription} />
+        )}
+        {canonicalUrl && (
+          <link rel="canonical" href={canonicalUrl} />
+        )}
+      </Helmet>
+
       {/* Page Header */}
       {(title || description) && (
         <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white">

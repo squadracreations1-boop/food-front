@@ -40,9 +40,9 @@ function Header() {
               <img src={Logo} alt="Maitreyi Foods" className="w-10 h-10 object-contain" />
             </div>
             <div className="flex flex-col">
-              <h1 className="text-lg md:text-xl font-bold text-emerald-800 tracking-tight leading-tight group-hover:text-emerald-600 transition-colors">
+              <span className="text-lg md:text-xl font-bold text-emerald-800 tracking-tight leading-tight group-hover:text-emerald-600 transition-colors">
                 Maitreyi Foods
-              </h1>
+              </span>
               <span className="hidden md:block text-[10px] font-semibold text-emerald-600 uppercase tracking-wider">
                 Fresh & Natural
               </span>

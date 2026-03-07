@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import './styles/PolicyPages.css';
 
 const LegalPrivacy = () => {
@@ -10,6 +11,11 @@ const LegalPrivacy = () => {
 
     return (
         <div className="policy-container">
+            <Helmet>
+                <title>Privacy Policy – Maitreyi Foods</title>
+                <meta name="description" content="Learn how Maitreyi Foods collects, uses, and protects your personal information. Read our privacy policy covering data security, cookies, your rights, and more." />
+                <link rel="canonical" href="https://www.maitreyifoods.com/privacy-policy" />
+            </Helmet>
             <div className="policy-header">
                 <h1>Maitreyi Foods</h1>
                 <p className="policy-subtitle">Taste the Tradition</p>
