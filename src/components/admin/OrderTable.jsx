@@ -18,8 +18,6 @@ const OrderTable = ({ orders = [], loading = false, onStatusUpdate, onDeleteOrde
     confirmText: 'Confirm',
     cancelText: 'Cancel',
     isDangerous: false,
-    cancelText: 'Cancel',
-    isDangerous: false,
     onConfirm: () => { }
   });
 
