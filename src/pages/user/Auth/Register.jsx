@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { register, clearAuthError } from '../../../actions/userActions'
+import { register, clearAuthError, googleLogin } from '../../../actions/userActions'
+import { useGoogleLogin } from '@react-oauth/google'
 import Button from '../../../components/common/Button'
 import Input from '../../../components/common/Input'
 import Loader from '../../../components/feedback/Loader'
@@ -115,6 +116,21 @@ const Register = () => {
 
     }
   }
+
+  const handleGoogleSuccess = async (tokenResponse) => {
+    try {
+      await dispatch(googleLogin(tokenResponse.access_token || tokenResponse.credential))
+      navigate('/', { replace: true })
+      toast.success('Google authentication successful!')
+    } catch (err) {
+      toast.error('Google authentication failed')
+    }
+  }
+
+  const signUpWithGoogle = useGoogleLogin({
+    onSuccess: handleGoogleSuccess,
+    onError: () => toast.error('Google sign up failed')
+  })
 
   return (
     <PageWrapper
@@ -295,7 +311,7 @@ const Register = () => {
             type="button"
             variant="outline"
             fullWidth
-            onClick={() => toast.info('Google sign up coming soon')}
+            onClick={() => signUpWithGoogle()}
           >
             <div className="flex items-center justify-center gap-2">
               <span><FcGoogle size={25} strokeWidth={2.5} color='green' /></span>

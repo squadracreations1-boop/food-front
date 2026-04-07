@@ -68,6 +68,25 @@ export const login = (formData) => async (dispatch) => {
 
 }
 
+export const googleLogin = (tokenId) => async (dispatch) => {
+    try {
+        dispatch(loginRequest())
+        const { data } = await api.post(`/api/v1/google-login`, { tokenId });
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+        }
+        dispatch(loginSuccess(data))
+        return data
+    } catch (error) {
+        const message =
+            error?.response?.data?.message ||
+            error?.message ||
+            'Google login failed'
+        dispatch(loginFail(message))
+        throw message
+    }
+}
+
 export const clearAuthError = (dispatch) => {
     dispatch(clearError())
 }

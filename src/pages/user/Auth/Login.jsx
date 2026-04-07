@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { login, clearAuthError } from '../../../actions/userActions'
+import { login, googleLogin, clearAuthError } from '../../../actions/userActions'
+import { useGoogleLogin } from '@react-oauth/google'
 import Button from '../../../components/common/Button'
 import Input from '../../../components/common/Input'
 import Loader from '../../../components/feedback/Loader'
@@ -64,6 +65,21 @@ const Login = () => {
       toast.error(error)
     }
   }
+
+  const handleGoogleSuccess = async (tokenResponse) => {
+    try {
+      await dispatch(googleLogin(tokenResponse.access_token || tokenResponse.credential))
+      navigate(from, { replace: true })
+      toast.success('Google Login successful')
+    } catch (err) {
+      toast.error('Google login failed')
+    }
+  }
+
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: handleGoogleSuccess,
+    onError: () => toast.error('Google login failed')
+  })
 
 
 
@@ -177,7 +193,7 @@ const Login = () => {
               type="button"
               variant="outline"
               fullWidth
-              onClick={() => toast.info('Google login coming soon')}
+              onClick={() => loginWithGoogle()}
             >
               <div className="flex items-center justify-center gap-2">
                 <span><FcGoogle size={20} strokeWidth={1.5} color='black' /></span>
