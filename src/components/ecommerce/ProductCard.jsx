@@ -1,15 +1,16 @@
 import React, { memo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addCartItem } from '../../actions/cartActions'
 import { addToWishlist, removeFromWishlist } from '../../actions/wishlistActions'
 import toast from 'react-hot-toast'
-import { ShoppingBag, Heart, Star, Eye, Truck, Leaf } from 'lucide-react'
+import { ShoppingBag,ShoppingCart, Heart, Star, Eye, Truck, Leaf, Flashlight, Zap } from 'lucide-react'
 import { getImageUrl } from '../../utils/urlHelpers';
 
 
 const ProductCard = memo(({ product, showAddToCart = true, className = '', imageAspectRatio = 'aspect-[4/5]' }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { items: wishlistItems } = useSelector(state => state.wishlist)
   const { isAuthenticated } = useSelector(state => state.auth)
 
@@ -45,6 +46,17 @@ const ProductCard = memo(({ product, showAddToCart = true, className = '', image
       toast.success(`${product.name} added!`)
     } catch (error) {
       toast.error('Failed to add')
+    }
+  }
+
+  const handleBuyNow = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    try {
+      await dispatch(addCartItem(product._id, 1))
+      navigate('/checkout')
+    } catch (error) {
+      toast.error('Failed to proceed')
     }
   }
 
@@ -191,27 +203,39 @@ const ProductCard = memo(({ product, showAddToCart = true, className = '', image
           </span>
         </div>
 
-        <div className="mt-auto pt-4 border-t border-dashed border-gray-100 flex items-center justify-between w-full">
+        <div className="mt-auto pt-4 border-t border-dashed border-gray-100 w-full space-y-2">
           {/* Price */}
-          <div className="flex flex-col leading-none">
-            {product.originalPrice > product.price && (
-              <span className="text-xs text-gray-400 line-through mb-1 font-medium">₹{product.originalPrice}</span>
-            )}
-            <span className={`text-xl font-bold ${product.originalPrice > product.price ? 'text-gray-900' : 'text-gray-900'}`}>
-              ₹{Math.floor(product.price)}
-            </span>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex flex-col leading-none">
+              {product.originalPrice > product.price && (
+                <span className="text-xs text-gray-400 line-through mb-1 font-medium">₹{product.originalPrice}</span>
+              )}
+              <span className={`text-xl font-bold ${product.originalPrice > product.price ? 'text-gray-900' : 'text-gray-900'}`}>
+                ₹{Math.floor(product.price)}
+              </span>
+            </div>
           </div>
 
-          {/* Add to Cart Button (Modified) */}
+          {/* Action Buttons */}
           {showAddToCart && product.stock > 0 && (
-            <button
-              onClick={handleAddToCart}
-              className="group/btn flex items-center gap-2 px-4 py-2 rounded-full bg-gray-900 text-white border border-transparent transition-all duration-300 hover:bg-emerald-600 hover:shadow-lg hover:scale-105 active:scale-95"
-              title="Add to Cart"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase tracking-wider">Add</span>
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2 w-full">
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border-2 border-emerald-600 text-emerald-600 bg-transparent transition-all duration-300 hover:bg-emerald-50 active:scale-95 text-xs font-bold uppercase tracking-wider"
+                title="Add to Cart"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                Add
+              </button>
+              <button
+                onClick={handleBuyNow}
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-600 text-white border-2 border-emerald-600 transition-all duration-300 hover:bg-emerald-700 hover:border-emerald-700 active:scale-95 text-xs font-bold uppercase tracking-wider shadow-sm"
+                title="Buy Now"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                Buy
+              </button>
+            </div>
           )}
         </div>
 

@@ -18,33 +18,13 @@ import Loader from '../../components/feedback/Loader'
 import PageWrapper from '../../components/layout/PageWrapper'
 import { useCart } from '../../hooks/useCart'
 import toast from 'react-hot-toast'
+import { calculateShippingCost } from '../../utils/shipping'
 
-// Payment methods configuration
-const PAYMENT_METHODS = {
-  WHATSAPP: {
-    id: 'WHATSAPP',
-    name: 'Order via WhatsApp',
-    description: 'Place your order and send details to us on WhatsApp',
-    icon: '📱'
-  },
-  RAZORPAY: {
-    id: 'RAZORPAY',
-    name: 'Direct Razorpay',
-    description: 'Currently Unavailable',
-    icon: '💳',
-    disabled: true
-  },
-  // COD: {
-  //   id: 'COD',
-  //   name: 'Cash on Delivery',
-  //   description: 'Pay when your order arrives',
-  //   icon: '💵'
-  // }
-}
 
 const Checkout = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
 
   // Get cart data
   const {
@@ -95,19 +75,10 @@ const Checkout = () => {
   const whatsappPhoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '918220857924'
   const razorpayKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_Ry8eVpIkR34dQK'
 
-  // Calculate shipping cost
-  const calculateShippingCost = useCallback((subtotal) => {
-    if (subtotal >= 1500) return 120
-    if (subtotal >= 1000) return 100
-    if (subtotal >= 500) return 90
-    if (subtotal >= 100) return 80
-    return 0
-  }, [])
-
   // Memoized price calculations
   const { subtotal, shipping, tax, total } = useMemo(() => {
     const subtotalVal = cartTotal || 0
-    const shippingVal = calculateShippingCost(subtotalVal)
+    const { actual: shippingVal } = calculateShippingCost(cartItems, subtotalVal)
     const taxVal = subtotalVal * 0.08
     const totalVal = subtotalVal + shippingVal + taxVal
 
@@ -117,7 +88,30 @@ const Checkout = () => {
       tax: taxVal,
       total: totalVal
     }
-  }, [cartTotal, calculateShippingCost])
+  }, [cartTotal, cartItems])
+
+  // Payment methods configuration
+  const PAYMENT_METHODS = {
+    WHATSAPP: {
+      id: 'WHATSAPP',
+      name: 'Order via WhatsApp',
+      description: 'Place your order and send details to us on WhatsApp',
+      icon: '📱'
+    },
+    RAZORPAY: {
+      id: 'RAZORPAY',
+      name: 'Direct Razorpay',
+      description: 'Currently Unavailable',
+      icon: '💳',
+      disabled: true
+    },
+    COD: {
+      id: 'COD',
+      name: 'Cash on Delivery',
+      description: 'Pay ₹' + (total || 0).toFixed(2) + ' at the time of delivery',
+      icon: '💵'
+    }
+  }
 
   // Initialize form with saved data or user data
   useEffect(() => {
@@ -447,6 +441,7 @@ const Checkout = () => {
   const safeCartItems = useMemo(() => {
     return cartItems.map(item => ({
       ...item,
+      isFeatured: !!(item.isFeatured || item.product?.isFeatured), // Explicitly captured for OrderSummary
       name: item.name || 'Product',
       price: item.price || 0,
       quantity: item.quantity || 1,

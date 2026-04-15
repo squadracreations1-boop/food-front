@@ -11,6 +11,7 @@ import Button from '../../components/common/Button'
 import PageWrapper from '../../components/layout/PageWrapper'
 import ConfirmationModal from '../../components/feedback/ConfirmationModal'
 import { useState } from 'react'
+import { calculateShippingCost } from '../../utils/shipping'
 
 const Cart = () => {
   const navigate = useNavigate()
@@ -89,16 +90,8 @@ const Cart = () => {
     proceedToCheckout()
   }
 
-  const calculateShippingCost = (subtotal) => {
-    if (subtotal >= 1500) return 120
-    if (subtotal >= 1000) return 100
-    if (subtotal >= 500) return 90
-    if (subtotal >= 100) return 80
-    return 0
-  }
-
   const subtotal = cartTotal
-  const shipping = calculateShippingCost(subtotal)
+  const { actual: shipping } = calculateShippingCost(items, subtotal)
   const tax = subtotal * 0.08
   const total = subtotal + shipping + tax
 

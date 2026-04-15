@@ -16,57 +16,52 @@ const Home = () => {
   const dispatch = useDispatch()
   const { products = [], loading } = useSelector(state => state.products || {})
   const { isAuthenticated } = useAuth()
-  const [featuredProducts, setFeaturedProducts] = useState([])
-  const [loadingFeatured, setLoadingFeatured] = useState(true)
+  const [displayProducts, setDisplayProducts] = useState([])
+  const [heroProducts, setHeroProducts] = useState([])
+  const [loadingProducts, setLoadingProducts] = useState(true)
 
-  // Load ALL featured products by paginating through all pages
   useEffect(() => {
     let isMounted = true
 
-    const fetchAllFeatured = async () => {
+    const fetchHomeContent = async () => {
       try {
-        let allProducts = []
-        let page = 1
-        let totalPages = 1
+        setLoadingProducts(true)
+        
+        // 1. Fetch Featured Products (sorted by updatedAt)
+        const { data: featuredData } = await api.get('/api/v1/products?isFeatured=true&sort=-updatedAt,-createdAt&limit=10')
+        const featured = (featuredData?.products || []).filter(p => p.stock > 0)
+        
+        // 2. Fetch Latest Non-Featured Products
+        const { data: latestData } = await api.get('/api/v1/products?isFeatured=false&sort=-updatedAt,-createdAt&limit=10')
+        const nonFeatured = (latestData?.products || []).filter(p => p.stock > 0)
 
-        // Fetch all pages to collect every product
-        do {
-          const { data } = await api.get(`/api/v1/products?page=${page}&sort=_id`)
-          if (data?.products?.length) {
-            allProducts = [...allProducts, ...data.products]
+        if (isMounted) {
+          // Hero shows top 4 featured products
+          setHeroProducts(featured.slice(0, 4))
+
+          // Home List: Featured first, then non-featured, up to 10 total
+          const combined = [...featured]
+          const remainingSlots = 10 - combined.length
+          
+          if (remainingSlots > 0) {
+            combined.push(...nonFeatured.slice(0, remainingSlots))
           }
-          // API returns count & resPerPage, not totalPages
-          const count = data?.count || 0
-          const perPage = data?.resPerPage || 8
-          totalPages = Math.max(1, Math.ceil(count / perPage))
-          page++
-        } while (page <= totalPages)
-
-        if (isMounted && allProducts.length) {
-          // Deduplicate products by _id (same product can appear across pages)
-          const uniqueProducts = allProducts.filter(
-            (product, index, self) => index === self.findIndex(p => p._id === product._id)
-          )
-          // Filter only isFeatured products with stock
-          const featured = uniqueProducts.filter(p => p.isFeatured && p.stock > 0)
-          setFeaturedProducts(featured)
+          
+          setDisplayProducts(combined.slice(0, 10))
         }
       } catch (error) {
-        console.error('Failed to fetch featured products:', error)
+        console.error('Failed to fetch home content:', error)
       } finally {
-        if (isMounted) setLoadingFeatured(false)
+        if (isMounted) setLoadingProducts(false)
       }
     }
 
-    fetchAllFeatured()
+    fetchHomeContent()
 
     return () => {
       isMounted = false
     }
   }, [])
-
-  // Hero shows the 4 most recently updated featured products
-  const heroProducts = featuredProducts.slice(0, 4)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
@@ -150,31 +145,31 @@ const Home = () => {
             </p>
           </div>
 
-          {loadingFeatured ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 animate-pulse">
-                  <div className="h-40 bg-gray-200 rounded mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded mb-2 w-3/4"></div>
-                  <div className="h-4 bg-gray-200 rounded mb-4 w-1/2"></div>
-                  <div className="flex justify-between">
-                    <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-                    <div className="h-8 bg-gray-200 rounded w-20"></div>
+          {loadingProducts ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 animate-pulse">
+                    <div className="h-40 bg-gray-200 rounded mb-4"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-2 w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-4 w-1/2"></div>
+                    <div className="flex justify-between">
+                      <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                      <div className="h-8 bg-gray-200 rounded w-20"></div>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <EmptyProducts />
-          )}
-
-          {featuredProducts.length > 0 && (
+                ))}
+              </div>
+            ) : displayProducts.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {displayProducts.map((product) => (
+                  <ProductCard key={product._id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <EmptyProducts />
+            )}
+  
+            {displayProducts.length > 0 && (
             <div className="text-center mt-12">
               <Link
                 to="/products"

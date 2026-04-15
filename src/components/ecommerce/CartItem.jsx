@@ -69,6 +69,12 @@ const CartItem = ({ item, onRemove }) => {
             <div className="mt-1 flex items-center gap-2">
               <span className="text-sm text-gray-600">Category:</span>
               <span className="text-sm text-emerald-600">{item.category || 'Organic'}</span>
+              
+              {(item.isFeatured || item.name?.toLowerCase().includes("nature's power pack")) && (
+                <span className="ml-2 flex items-center gap-1 bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase">
+                  <span className="text-[12px]">🚚</span> Featured
+                </span>
+              )}
             </div>
 
             {/* Stock Info */}

@@ -135,6 +135,7 @@ export const useCart = () => {
     updateQuantity,
     clearCart,
     proceedToCheckout,
+    syncWithServer: () => dispatch(getCart()),
     cartTotal: getCartTotal(),
     cartCount: getCartCount(),
     getCartItem,

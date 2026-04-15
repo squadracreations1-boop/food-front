@@ -13,7 +13,20 @@ const OrderSummary = ({
   checkoutLabel = "Proceed to Checkout",
   showItems = true
 }) => {
-  const total = subtotal + shipping + tax - discount
+  const isFeaturedFree = items.some(item => {
+    const isFeaturedFlag = (
+      item.isFeatured === true || 
+      item.isFeatured === 'true' || 
+      item.product?.isFeatured === true || 
+      item.product?.isFeatured === 'true'
+    );
+    // Safety fallback
+    const isPowerPack = item.name?.toLowerCase().includes("nature's power pack");
+    return isFeaturedFlag || isPowerPack;
+  });
+
+  const effectiveShipping = isFeaturedFree ? 0 : shipping;
+  const total = subtotal + effectiveShipping + tax - discount
 
   const calculateTax = () => {
     if (tax > 0) return tax
@@ -70,11 +83,20 @@ const OrderSummary = ({
           </div>
         )}
 
-        <div className="flex justify-between text-sm">
+        <div className="flex justify-between text-sm items-center">
           <span className="text-gray-600">Shipping</span>
-          <span className="font-medium">
-            {shipping === 0 ? 'FREE' : `₹${shipping.toFixed(2)}`}
-          </span>
+          <div className="flex flex-col items-end">
+            {isFeaturedFree ? (
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400 line-through text-xs">₹{(Math.min(120, Math.max(80, subtotal >= 1500 ? 120 : subtotal >= 1000 ? 100 : subtotal >= 500 ? 90 : 80))).toFixed(2)}</span>
+                <span className="font-bold text-emerald-600">FREE</span>
+              </div>
+            ) : (
+              <span className="font-medium">
+                {shipping === 0 ? 'FREE' : `₹${shipping.toFixed(2)}`}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex justify-between text-sm">
@@ -83,10 +105,16 @@ const OrderSummary = ({
         </div>
 
         {/* Shipping Notice */}
-        {shipping === 0 && subtotal > 0 && (
+        {isFeaturedFree ? (
+          <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100">
+            <p className="text-xs text-emerald-800 text-center font-medium">
+              ✨ Free Shipping applied (Featured Item)
+            </p>
+          </div>
+        ) : shipping === 0 && subtotal > 0 && (
           <div className="p-3 bg-emerald-50 rounded-lg">
             <p className="text-sm text-emerald-700 text-center">
-              🎉 Free shipping on orders over ₹50
+              🎉 Free shipping on orders over ₹500
             </p>
           </div>
         )}
