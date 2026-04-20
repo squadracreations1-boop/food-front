@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { getProduct, createReview } from '../../actions/productActions'
+import { getProduct, createReview, getProducts } from '../../actions/productActions'
 import { addCartItem } from '../../actions/cartActions'
 import ProductGallery from '../../components/ecommerce/ProductGallery'
 import PriceTag from '../../components/ecommerce/PriceTag'
@@ -41,13 +41,13 @@ const ProductDetails = () => {
   }, [id, dispatch])
 
   // Load related products
-  useEffect(() => {
-    if (product?.category) {
-      // Note: This would use getProducts with category filter
-      // For now, we'll filter from existing products
-    }
-  }, [product])
-
+// Load related products
+useEffect(() => {
+  if (product?.category) {
+    dispatch(getProducts('', null, product.category, null, 1))
+  }
+}, [product?.category, dispatch])
+  
   const relatedProducts = products
     .filter(p => p.category === product?.category && p._id !== product?._id)
     .slice(0, 4)
