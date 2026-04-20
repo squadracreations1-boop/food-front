@@ -389,12 +389,9 @@ const ProductDetails = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Delivery</p>
-                <p className="font-medium">1-2 business days</p>
+                <p className="font-medium">2-4 business days</p>
               </div>
-              <div>
-                <p className="text-sm text-gray-600">Returns</p>
-                <p className="font-medium">30 days return policy</p>
-              </div>
+            
             </div>
           </div>
         </div>
